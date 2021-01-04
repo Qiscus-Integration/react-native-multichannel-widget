@@ -26,7 +26,7 @@ import {MultichannelWidgetProvider} from 'react-native-multichannel-widget';
 
 // in your render function 
 return (
-  <MultichannelWidgetProvider>  // <- use RootSiblingParent to wrap your root component
+  <MultichannelWidgetProvider>  // <- use MultichannelWidgetProvider
     <App />
   </MultichannelWidgetProvider>
 );
