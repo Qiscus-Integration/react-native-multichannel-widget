@@ -1,4 +1,8 @@
-
+<p align="center">
+    <a href="https://getferdi.com/services">
+      <img src="./screenshot.png" alt=""  width="260" height="510" />
+    </a>
+</p>
 <h3 align="center">
   React Native Multichannel
 </h3>
@@ -12,7 +16,7 @@
 
 ## Installation
 
-- Using [npm](https://www.npmjs.com/#getting-started): `npm install {LINK REPO}`
+- Using [npm](https://www.npmjs.com/#getting-started): `npm i @qiscus-integration/react-native-multichannel-widget`
 
 ## USAGE
 We use Hooks to synchronize data. To make it work we have to explicitly insert a mount point in your app like this:

@@ -1,6 +1,6 @@
 {
-  "name": "react-native-multichannel-widget",
-  "version": "1.0.0",
+  "name": "@qiscus-integration/react-native-multichannel-widget",
+  "version": "0.1.1",
   "description": "RN multichannel widget (Build in UI)",
   "main": "lib/index.js",
   "scripts": {
@@ -51,5 +51,22 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qiscus-Integration/rn-multichannel-widget.git"
+  },
+  "keywords": [
+    "qiscus",
+    "multichannel"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Qiscus-Integration/rn-multichannel-widget/issues"
+  },
+  "homepage": "https://github.com/Qiscus-Integration/rn-multichannel-widget#readme"
 }
