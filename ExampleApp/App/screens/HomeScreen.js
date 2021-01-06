@@ -15,9 +15,10 @@ function HomeScreen({navigation}) {
   const AppId = 'ADD APP ID QISCUS MULTICHANNEL HERE';
 
   const submit = () => {
+    const isEmailValid = validateEmail(email)
     setNameError(name === '');
-    setEmailError(email === '');
-    if (name !== '' && email !== '') {
+    setEmailError(!isEmailValid);
+    if (name !== '' && isEmailValid) {
       hideModal()
       navigation.navigate('Chat', {
         name: name,
@@ -27,6 +28,12 @@ function HomeScreen({navigation}) {
   };
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   useEffect(() => {
     widget.setup(AppId, {
       //title: 'Customer Service',
