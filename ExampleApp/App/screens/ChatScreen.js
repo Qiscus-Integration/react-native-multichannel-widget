@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Linking, Platform} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import Widget, {Header, MultichannelWidget} from "react-native-multichannel-widget";
+import Widget, {Header, MultichannelWidget} from '@qiscus-integration/react-native-multichannel-widget';
 
 function ChatScreen({route, navigation}) {
     React.useLayoutEffect(() => {

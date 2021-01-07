@@ -18,7 +18,6 @@
     "react-native": "0.63.4",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-image-picker": "^2.3.4",
-    "react-native-multichannel-widget": "file:../react-native-multichannel-widget-1.0.0.tgz",
     "react-native-paper": "^4.4.1",
     "react-native-push-notification": "^6.1.3",
     "react-native-reanimated": "^1.13.2",

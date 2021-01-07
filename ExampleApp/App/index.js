@@ -3,8 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
-import {MultichannelWidgetProvider} from 'react-native-multichannel-widget';
 import {Provider} from 'react-native-paper';
+import {MultichannelWidgetProvider} from '@qiscus-integration/react-native-multichannel-widget';
 
 const Stack = createStackNavigator();
 
