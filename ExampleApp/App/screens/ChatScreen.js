@@ -3,12 +3,17 @@ import {Linking, Platform} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import Widget, {Header, MultichannelWidget} from '@qiscus-integration/react-native-multichannel-widget';
+import {  StackActions } from '@react-navigation/native';
 
 function ChatScreen({route, navigation}) {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             header: () => <Header
-                onBackPress={() => navigation.goBack()}
+                onBackPress={() => {
+                    if(navigation.canGoBack()) {
+                        navigation.dispatch(StackActions.pop(1));
+                    }
+                }}
             />
         });
     }, [navigation]);
