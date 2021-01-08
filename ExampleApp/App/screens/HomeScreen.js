@@ -4,6 +4,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Widget from '@qiscus-integration/react-native-multichannel-widget';
 import * as PushNotification from 'react-native-push-notification';
+import messaging from '@react-native-firebase/messaging';
 
 function HomeScreen({navigation}) {
   const [name, setName] = useState('');
@@ -34,6 +35,28 @@ function HomeScreen({navigation}) {
     return re.test(String(email).toLowerCase());
   }
 
+  async function setupPushNoif() {
+    PushNotification.removeAllDeliveredNotifications();
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const token = await messaging().getToken();
+      localStorage.setItem('FCM_TOKEN', token);
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        const {title, body} = remoteMessage.notification
+        PushNotification.localNotification({
+          autoCancel: true,
+          title: title,
+          message: body,
+          vibrate: false,
+          playSound: false,
+        })
+      });
+    }
+  }
   useEffect(() => {
     widget.setup(AppId, {
       //title: 'Customer Service',
@@ -41,17 +64,7 @@ function HomeScreen({navigation}) {
       //avatar : 'https://www.qiscus.com/images/faveicon.png'
     });
 
-    PushNotification.configure({
-      onRegister: function({token}) {
-        localStorage.setItem('FCM_TOKEN', token);
-      },
-      onNotification: function({data}) {
-        // const payload = JSON.parse(data.payload)
-        //console.log('REMOTE NOTIFICATION ==>', JSON.stringify(payload));
-      },
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
+    setupPushNoif()
   }, []);
   return (
     <View style={{flex: 1, padding: 16}}>
