@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import Widget from '@qiscus-integration/react-native-multichannel-widget';
 import * as PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
+import {clearNotification} from '../helpers/NotificationHelper';
 
 function HomeScreen({navigation}) {
   const [name, setName] = useState('');
@@ -16,11 +17,11 @@ function HomeScreen({navigation}) {
   const AppId = 'ADD APP ID QISCUS MULTICHANNEL HERE';
 
   const submit = () => {
-    const isEmailValid = validateEmail(email)
+    const isEmailValid = validateEmail(email);
     setNameError(name === '');
     setEmailError(!isEmailValid);
     if (name !== '' && isEmailValid) {
-      hideModal()
+      hideModal();
       navigation.navigate('Chat', {
         name: name,
         email: email,
@@ -36,27 +37,29 @@ function HomeScreen({navigation}) {
   }
 
   async function setupPushNoif() {
-    PushNotification.removeAllDeliveredNotifications();
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
+      clearNotification()
       const token = await messaging().getToken();
       localStorage.setItem('FCM_TOKEN', token);
       const unsubscribe = messaging().onMessage(async remoteMessage => {
-        const {title, body} = remoteMessage.notification
+        const {title, body} = remoteMessage.notification;
         PushNotification.localNotification({
           autoCancel: true,
           title: title,
           message: body,
           vibrate: false,
           playSound: false,
-        })
+        });
       });
+
     }
   }
+
   useEffect(() => {
     widget.setup(AppId, {
       //title: 'Customer Service',
@@ -64,7 +67,7 @@ function HomeScreen({navigation}) {
       //avatar : 'https://www.qiscus.com/images/faveicon.png'
     });
 
-    setupPushNoif()
+    setupPushNoif();
   }, []);
   return (
     <View style={{flex: 1, padding: 16}}>
