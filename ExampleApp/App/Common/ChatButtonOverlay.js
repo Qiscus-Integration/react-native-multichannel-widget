@@ -17,6 +17,24 @@ const ChatButtonOverlay = ({children}) => {
           position: 'absolute',
           bottom: 10,
           right: 20,
+          backgroundColor: '#fff',
+          width: 100,
+          height: 100,
+          paddingRight: 10,
+          paddingBottom: 10,
+          borderRadius: 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignContent: 'center',
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          shadowOpacity: 0.30,
+          shadowRadius: 4.65,
+
+          elevation: 8,
         }}>
         <Image
           style={{

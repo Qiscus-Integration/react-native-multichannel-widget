@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const MainStack = createStackNavigator();
 const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
 function ScreenSample({route, navigation}) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
