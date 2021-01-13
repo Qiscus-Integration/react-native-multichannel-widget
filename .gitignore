@@ -22,4 +22,4 @@ yarn.lock
 
 package-lock.json
 
-react-native-multichannel-widget-*.*gz
+*.tgz
