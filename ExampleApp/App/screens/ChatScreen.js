@@ -215,9 +215,9 @@ function ChatScreen({route, navigation}) {
         onPressSendAttachment={onPressSendAttachment}
       />
       <Dialog.Container visible={showAlert}>
-        <Dialog.Title>Resolve Chat</Dialog.Title>
+        <Dialog.Title>End Chat</Dialog.Title>
         <Dialog.Description>
-          Do you want to resolve chat.
+          Do you want to end chat.
         </Dialog.Description>
         <Dialog.Button
           label="Cancel"

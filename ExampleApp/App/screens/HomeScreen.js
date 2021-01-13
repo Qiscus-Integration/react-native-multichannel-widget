@@ -5,26 +5,27 @@ import {toProperCase} from '../helpers/Utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Text} from 'react-native-paper';
 import Widget from '@qiscus-integration/react-native-multichannel-widget';
+import * as PushNotification from 'react-native-push-notification';
 
 const HomeScreen = ({route, navigation}) => {
-    React.useLayoutEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity
-            style={{
-              padding: 10,
-            }}
-            onPress={() => {
-              navigation.replace('Login')
-              widget.clearUser()
-              AsyncStorage.removeItem('Name')
-              AsyncStorage.removeItem('Email')
-            }}>
-            <Icon name="power" size={22} color="#000000"/>
-          </TouchableOpacity>
-        ),
-      });
-    }, [navigation]);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 10,
+          }}
+          onPress={() => {
+            navigation.replace('Login');
+            widget.clearUser();
+            AsyncStorage.removeItem('Name');
+            AsyncStorage.removeItem('Email');
+          }}>
+          <Icon name="power" size={22} color="#000000"/>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const [name, setName] = useState('yoga');
   const [email, setEmail] = useState('yoga@mail.com');
@@ -40,7 +41,27 @@ const HomeScreen = ({route, navigation}) => {
       .then(value => {
         setEmail(toProperCase(value));
       });
+
+    PushNotification.configure({
+      onNotification: function(notification) {
+        openChat()
+      },
+    });
+
   }, []);
+
+  const openChat = () => {
+    if(!roomId){
+      widget.initiateChat(email, name, localStorage.getItem('FCM_TOKEN'))
+        .then(data => {
+          //console.log(data)
+        })
+        .catch(e => {
+          console.log('error login', e);
+        });
+    }
+    navigation.navigate('Chat');
+  }
   return (
     <View style={{
       flex: 1,
@@ -67,16 +88,7 @@ const HomeScreen = ({route, navigation}) => {
         alignItems: 'center',
       }}>
         <TouchableOpacity
-          onPress={() => {
-            widget.initiateChat(email, name, localStorage.getItem('FCM_TOKEN'))
-              .then(data => {
-                //console.log(data)
-              })
-              .catch(e => {
-                console.log('error login', e);
-              });
-            navigation.navigate('Chat');
-          }}
+          onPress={() => openChat()}
           style={{
             backgroundColor: '#fff',
             width: 70,
