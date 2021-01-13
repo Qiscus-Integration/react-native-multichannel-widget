@@ -1,22 +1,46 @@
-import React from 'react';
-import {Linking, Platform} from 'react-native';
+import React, {useState} from 'react';
+import {Linking, Platform, TouchableOpacity, View} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import {
+import Widget, {
   Header,
   MultichannelWidget,
 } from '@qiscus-integration/react-native-multichannel-widget';
 import {StackActions} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Dialog from 'react-native-dialog';
 
 function ChatScreen({route, navigation}) {
+  const [showAlert, setShowAlert] = useState(false);
+  const widget = Widget();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header
-        onBackPress={() => {
-          if (navigation.canGoBack()) {
-            navigation.dispatch(StackActions.pop(1));
-          }
-        }}
+        headerLeft={(
+          <TouchableOpacity
+            style={{
+              padding: 10,
+            }}
+            onPress={() => {
+              setShowAlert(true)
+            }}>
+            <Icon name="arrowleft" size={22} color="#000000"/>
+          </TouchableOpacity>
+        )}
+        headerRight={(
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              transform: [{rotate: '180deg'}],
+            }}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.dispatch(StackActions.pop(1));
+              }
+            }}>
+            <Icon name="caretcircleoup" size={22} color="#000000"/>
+          </TouchableOpacity>
+        )}
       />,
     });
   }, [navigation]);
@@ -180,13 +204,34 @@ function ChatScreen({route, navigation}) {
   };
 
   return (
-    <MultichannelWidget
-      onSuccessGetRoom={room => {
-        // console.log(room)
-      }}
-      onDownload={onDownload}
-      onPressSendAttachment={onPressSendAttachment}
-    />
+    <View style={{
+      flex: 1,
+    }}>
+      <MultichannelWidget
+        onSuccessGetRoom={room => {
+          // console.log(room)
+        }}
+        onDownload={onDownload}
+        onPressSendAttachment={onPressSendAttachment}
+      />
+      <Dialog.Container visible={showAlert}>
+        <Dialog.Title>Resolve Chat</Dialog.Title>
+        <Dialog.Description>
+          Do you want to resolve chat.
+        </Dialog.Description>
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => setShowAlert(false)}/>
+        <Dialog.Button
+          label="Yes"
+          onPress={() => {
+            widget.clearUser()
+            if (navigation.canGoBack()) {
+              navigation.dispatch(StackActions.pop(1));
+            }
+          }}/>
+      </Dialog.Container>
+    </View>
   );
 }
 

@@ -5,11 +5,11 @@ import Widget from '@qiscus-integration/react-native-multichannel-widget';
 
 const ChatButtonOverlay = ({children}) => {
   const navigation = useNavigation();
-  const {unReadCount} = Widget().state;
+  const {unReadCount, roomId} = Widget().state;
   return (
     <View style={{flex: 1}}>
       {children}
-      <TouchableOpacity
+      {roomId != null && <TouchableOpacity
         onPress={() => {
           navigation.navigate('Chat');
         }}
@@ -43,7 +43,7 @@ const ChatButtonOverlay = ({children}) => {
           }}
           source={unReadCount > 0 ? require('../images/cs-new-message.png') : require('../images/cs.png')}
         />
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </View>
   );
 };

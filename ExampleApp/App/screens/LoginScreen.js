@@ -6,6 +6,7 @@ import Widget from '@qiscus-integration/react-native-multichannel-widget';
 import messaging from '@react-native-firebase/messaging';
 import {clearNotification} from '../helpers/NotificationHelper';
 import * as PushNotification from 'react-native-push-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen({navigation}) {
   const [name, setName] = useState('');
@@ -20,17 +21,11 @@ function LoginScreen({navigation}) {
     setNameError(name === '');
     setEmailError(!isEmailValid);
     if (name !== '' && isEmailValid) {
-      widget.initiateChat(email, name, localStorage.getItem('FCM_TOKEN'))
-        .then(data => {
-          //console.log(data)
-        })
-        .catch(e => {
-          console.log('error login', e);
-        });
-
-      navigation.replace('Home',{
+      _setName(name)
+      _setEmail(email)
+      navigation.replace('Home', {
         name: name,
-        email: email
+        email: email,
       });
     }
   };
@@ -40,13 +35,17 @@ function LoginScreen({navigation}) {
     return re.test(String(email).toLowerCase());
   }
 
+  const _setName = value => AsyncStorage.setItem('Name', value.toString())
+
+  const _setEmail = value => AsyncStorage.setItem('Email', value.toString())
+
   useEffect(() => {
     widget.setup(AppId, {
       //title: 'Customer Service',
       //subtitle: 'ready to serve',
       //avatar : 'https://www.qiscus.com/images/faveicon.png'
     });
-    setupPushNoif()
+    setupPushNoif();
   }, []);
 
   async function setupPushNoif() {
@@ -69,9 +68,9 @@ function LoginScreen({navigation}) {
           playSound: false,
         });
       });
-
     }
   }
+
   return (
     <View style={{flex: 1, padding: 16}}>
       <TextInput
