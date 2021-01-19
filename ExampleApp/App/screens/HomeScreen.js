@@ -95,18 +95,6 @@ const HomeScreen = ({route, navigation}) => {
             height: 70,
             paddingRight: 10,
             paddingBottom: 10,
-            borderRadius: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-            alignContent: 'center',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 4,
-            },
-            shadowOpacity: 0.30,
-            shadowRadius: 4.65,
-            elevation: 8,
           }}>
           <Icon name="chatbubbles-sharp" size={30} color="#ACACAC"/>
           <Text>Chat</Text>

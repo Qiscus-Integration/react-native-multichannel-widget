@@ -14,7 +14,7 @@ function LoginScreen({navigation}) {
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const widget = Widget();
-  const AppId = 'karm-gzu41e4e4dv9fu3f';
+  const AppId = 'ADD APP ID QISCUS MULTICHANNEL HERE';
 
   const submit = () => {
      const isEmailValid = validateEmail(email);
