@@ -7,14 +7,13 @@ import messaging from '@react-native-firebase/messaging';
 import {clearNotification} from '../helpers/NotificationHelper';
 import * as PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {APP_ID} from "react-native-dotenv"
 function LoginScreen({navigation}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const widget = Widget();
-  const AppId = 'ADD APP ID QISCUS MULTICHANNEL HERE';
 
   const submit = () => {
      const isEmailValid = validateEmail(email);
@@ -40,7 +39,7 @@ function LoginScreen({navigation}) {
   const _setEmail = value => AsyncStorage.setItem('Email', value.toString());
 
   useEffect(() => {
-    widget.setup(AppId, {
+    widget.setup(APP_ID, {
       //title: 'Customer Service',
       //subtitle: 'ready to serve',
       //avatar : 'https://www.qiscus.com/images/faveicon.png'

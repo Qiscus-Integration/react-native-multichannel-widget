@@ -6,24 +6,17 @@ import * as ImagePicker from 'expo-image-picker';
 import Widget, {MultichannelWidgetProvider, MultichannelWidget} from './lib';
 import {getFileExtension, getUrlFileName} from './lib/utils';
 import Arrow from './lib/components/common/Arrow';
-
+import {APP_ID, USER_ID, NAME, DEVICE_ID} from "react-native-dotenv"
 function Sample() {
-    const widget = Widget()
-    const AppId = "ADD APP ID QISCUS MULTICHANNEL HERE"
-
-    //set user for development
-    const userId = ''
-    const name = ''
-    const deviceId = ''
-
+  const widget = Widget();
   useEffect(() => {
-    widget.setup(AppId, {
+    widget.setup(APP_ID, {
       //title: 'selamat datang',
       //subtitle: 'ready to serve',
       //avatar : 'https://avatars0.githubusercontent.com/u/3271668?s=60&u=5f4d6d9ce12f2aa0ffbaf4a9c9428ccd00f8b0ef&v=4'
     });
 
-    widget.initiateChat(userId, name, deviceId)
+    widget.initiateChat(USER_ID, NAME, DEVICE_ID)
       .then(data => {
         //console.log(data)
       })
