@@ -14,7 +14,6 @@ export const addNotificationBadge = () => {
           let count = parseInt(value) + 1;
           PushNotification.setApplicationIconBadgeNumber(count);
           AsyncStorage.setItem('notif', count.toString());
-          console.log(count);
         } else {
           AsyncStorage.setItem('notif', '1'.toString());
           PushNotification.setApplicationIconBadgeNumber(1);

@@ -7,27 +7,26 @@ import messaging from '@react-native-firebase/messaging';
 import {clearNotification} from '../helpers/NotificationHelper';
 import * as PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {APP_ID} from "react-native-dotenv"
 function LoginScreen({navigation}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const widget = Widget();
-  const AppId = 'ADD APP ID QISCUS MULTICHANNEL HERE';
 
   const submit = () => {
-    const isEmailValid = validateEmail(email);
-    setNameError(name === '');
-    setEmailError(!isEmailValid);
-    if (name !== '' && isEmailValid) {
-      _setName(name)
-      _setEmail(email)
-      navigation.replace('Home', {
-        name: name,
-        email: email,
-      });
-    }
+     const isEmailValid = validateEmail(email);
+     setNameError(name === '');
+     setEmailError(!isEmailValid);
+     if (name !== '' && isEmailValid) {
+       _setName(name);
+       _setEmail(email);
+       navigation.replace('Home', {
+         name: name,
+         email: email,
+       });
+     }
   };
 
   function validateEmail(email) {
@@ -35,16 +34,35 @@ function LoginScreen({navigation}) {
     return re.test(String(email).toLowerCase());
   }
 
-  const _setName = value => AsyncStorage.setItem('Name', value.toString())
+  const _setName = value => AsyncStorage.setItem('Name', value.toString());
 
-  const _setEmail = value => AsyncStorage.setItem('Email', value.toString())
+  const _setEmail = value => AsyncStorage.setItem('Email', value.toString());
 
   useEffect(() => {
-    widget.setup(AppId, {
+    widget.setup(APP_ID, {
       //title: 'Customer Service',
       //subtitle: 'ready to serve',
       //avatar : 'https://www.qiscus.com/images/faveicon.png'
     });
+    let name = ''
+    let email = ''
+    setTimeout(() => {
+      AsyncStorage.multiGet(['Email', 'Name'])
+        .then(value => {
+          value.forEach(v => {
+            if (v[0] === 'Email' && v[1] != null) {
+              email = v[1];
+            }
+            if (v[0] === 'Name' && v[1] != null) {
+              name =  v[1]
+            }
+
+            if(name !== '' || email !== '') navigation.replace('Home')
+
+          });
+        })
+
+    }, 500);
     setupPushNoif();
   }, []);
 
@@ -58,7 +76,7 @@ function LoginScreen({navigation}) {
       clearNotification();
       const token = await messaging().getToken();
       localStorage.setItem('FCM_TOKEN', token);
-      const unsubscribe = messaging().onMessage(async remoteMessage => {
+      messaging().onMessage(async remoteMessage => {
         const {title, body} = remoteMessage.notification;
         PushNotification.localNotification({
           autoCancel: true,
@@ -95,7 +113,7 @@ function LoginScreen({navigation}) {
         }}
         mode="contained"
         uppercase={false}
-        onPress={() => submit()}>
+        onPress={() => submit(email, name)}>
         Login
       </Button>
     </View>

@@ -24,21 +24,20 @@ function ChatScreen({route, navigation}) {
             onPress={() => {
               setShowAlert(true)
             }}>
-            <Icon name="arrowleft" size={22} color="#000000"/>
+            <Icon name="close" size={22} color="#000000"/>
           </TouchableOpacity>
         )}
         headerRight={(
           <TouchableOpacity
             style={{
               padding: 10,
-              transform: [{rotate: '180deg'}],
             }}
             onPress={() => {
               if (navigation.canGoBack()) {
                 navigation.dispatch(StackActions.pop(1));
               }
             }}>
-            <Icon name="caretcircleoup" size={22} color="#000000"/>
+            <Icon name="circledowno" size={22} color="#000000"/>
           </TouchableOpacity>
         )}
       />,
@@ -208,6 +207,7 @@ function ChatScreen({route, navigation}) {
       flex: 1,
     }}>
       <MultichannelWidget
+        sendAttachment={false}
         onSuccessGetRoom={room => {
           // console.log(room)
         }}
@@ -215,9 +215,9 @@ function ChatScreen({route, navigation}) {
         onPressSendAttachment={onPressSendAttachment}
       />
       <Dialog.Container visible={showAlert}>
-        <Dialog.Title>Resolve Chat</Dialog.Title>
+        <Dialog.Title>End Chat</Dialog.Title>
         <Dialog.Description>
-          Do you want to resolve chat.
+          Do you want to end chat.
         </Dialog.Description>
         <Dialog.Button
           label="Cancel"

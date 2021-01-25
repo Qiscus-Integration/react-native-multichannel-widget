@@ -1,29 +1,22 @@
 //GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 import React, {useEffect, useState} from 'react';
-import {Linking, StyleSheet, View} from 'react-native';
+import {Image, Linking, StyleSheet, View} from 'react-native';
 import Header from './lib/components/common/Header';
 import * as ImagePicker from 'expo-image-picker';
 import Widget, {MultichannelWidgetProvider, MultichannelWidget} from './lib';
 import {getFileExtension, getUrlFileName} from './lib/utils';
 import Arrow from './lib/components/common/Arrow';
-
+import {APP_ID, USER_ID, NAME, DEVICE_ID} from "react-native-dotenv"
 function Sample() {
-    const widget = Widget()
-    const AppId = "ADD APP ID QISCUS MULTICHANNEL HERE"
-
-    //set user for development
-    const userId = ''
-    const name = ''
-    const deviceId = ''
-
+  const widget = Widget();
   useEffect(() => {
-    widget.setup(AppId, {
+    widget.setup(APP_ID, {
       //title: 'selamat datang',
       //subtitle: 'ready to serve',
       //avatar : 'https://avatars0.githubusercontent.com/u/3271668?s=60&u=5f4d6d9ce12f2aa0ffbaf4a9c9428ccd00f8b0ef&v=4'
     });
 
-    widget.initiateChat(userId, name, deviceId)
+    widget.initiateChat(USER_ID, NAME, DEVICE_ID)
       .then(data => {
         //console.log(data)
       })
@@ -76,8 +69,6 @@ function Sample() {
     <View style={styles.container}>
       <Header
         height={56}
-        onBackPress={() => {
-        }}
         headerLeft={<Arrow
           style={styles.arrowIcon}
           onPress={() => {
@@ -97,6 +88,10 @@ function Sample() {
           Linking.openURL(url);
         }}
         onPressSendAttachment={pickImage}
+        renderTickSent = {<Image source={require("./lib/assets/ic_check_sent.png")} style={styles.tick}/>}
+        renderTickDelivered={<Image source={require("./lib/assets/ic_check_delivered.png")} style={styles.tick}/>}
+        renderTickRead = {<Image source={require("./lib/assets/ic_check_read.png")} style={styles.tick}/>}
+        renderTickPending ={<Image source={require("./lib/assets/ic_check_pending.png")} style={styles.tick}/>}
       />
     </View>
   );
@@ -118,6 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  tick: {height: 15, width: 15, marginRight: 3}
 });
 
 function App() {
