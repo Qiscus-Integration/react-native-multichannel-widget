@@ -90,8 +90,6 @@ widget.setup(AppId, {
 - **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
 - **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
 - **`placeholder`** _(String)_ - Extra props to be custom placeholder, default `Type a message...`
-
-     ,
      
 ## Example App
 Example folder contains an example app to demonstrate how to use this package.
