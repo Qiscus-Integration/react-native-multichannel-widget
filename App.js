@@ -69,8 +69,6 @@ function Sample() {
     <View style={styles.container}>
       <Header
         height={56}
-        onBackPress={() => {
-        }}
         headerLeft={<Arrow
           style={styles.arrowIcon}
           onPress={() => {
