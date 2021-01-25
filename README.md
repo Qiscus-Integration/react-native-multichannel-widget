@@ -57,9 +57,21 @@ widget.setup(AppId, {
 ## Use Header Component 
 ```
 <Header
-    onBackPress={() => navigation.goBack()}
+    height={56}
+    style={{
+       backgroundColor : 'orange'
+    }}
+    textColor = 'white'
 />
 ```
+## Props
+
+- **`height`** _(Integer)_ - Height of the Header, default is `56`
+- **`headerRight`** _(Object)_ -  Extra props to be passed Component to the Right Header 
+- **`headerLeft`** _(Object)_ -  Extra props to be passed Component to the Left Header
+- **`style`** _(Object)_ -  Extra props to be passed custom style header
+- **`textColor`** _(String)_ -  Custom text color header 
+
 ## Use Chat Component
 ```
 <MultichannelWidget
@@ -69,7 +81,18 @@ widget.setup(AppId, {
             onPressSendAttachment={onPressSendAttachment}
         />
 ```
- 
+## Props
+
+- **`onSuccessGetRoom`** _(Function(`room`))_ - Callback when success get room
+- **`onPressSendAttachment`** _(Function)_ - Callback when button Send Attachment is tapped
+- **`onDownload`** _(Function)_ - Callback when a download message attachment is tapped
+- **`renderSendAttachment`** _(Object)_ - Extra props to be custom Component button Send Attachment
+- **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
+- **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
+- **`placeholder`** _(String)_ - Extra props to be custom placeholder, default `Type a message...`
+
+     ,
+     
 ## Example App
 Example folder contains an example app to demonstrate how to use this package.
 
