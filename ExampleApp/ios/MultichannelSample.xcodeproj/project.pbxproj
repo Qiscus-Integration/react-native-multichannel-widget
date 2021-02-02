@@ -15,6 +15,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* MultichannelSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MultichannelSampleTests.m */; };
+		3DDC2B2925C9409E0039EDAA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDC2B2825C9409E0039EDAA /* GoogleService-Info.plist */; };
 		6BC5A1BC15B06BC9B004596D /* libPods-MultichannelSample-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6885AF516B5199F3D4B832BB /* libPods-MultichannelSample-tvOS.a */; };
 		7ACB67E88927FD643B722202 /* libPods-MultichannelSample-MultichannelSampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 874643E482A3A7D69848AE2E /* libPods-MultichannelSample-MultichannelSampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -59,6 +60,7 @@
 		252572D28EA4AEFBB0552D96 /* Pods-MultichannelSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultichannelSample.debug.xcconfig"; path = "Target Support Files/Pods-MultichannelSample/Pods-MultichannelSample.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* MultichannelSample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MultichannelSample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* MultichannelSample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MultichannelSample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DDC2B2825C9409E0039EDAA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "MultichannelSample/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		441CDA43C9A94854BF488951 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		4C6299CC03C548E596FF4A5B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		502CEF841D6946BAD2035A08 /* Pods-MultichannelSample-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultichannelSample-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MultichannelSample-tvOSTests/Pods-MultichannelSample-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		13B07FAE1A68108700A75B9A /* MultichannelSample */ = {
 			isa = PBXGroup;
 			children = (
+				3DDC2B2825C9409E0039EDAA /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -382,6 +385,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				3DDC2B2925C9409E0039EDAA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
