@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Linking, Platform, TouchableOpacity, View} from 'react-native';
+import {Linking, Platform, Text, TouchableOpacity, View, SafeAreaView} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import Widget, {
@@ -9,38 +9,43 @@ import Widget, {
 import {StackActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Dialog from 'react-native-dialog';
+import UserInactivity from 'react-native-user-inactivity';
 
 function ChatScreen({route, navigation}) {
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertInactivity, setShowAlertInactivity] = useState(false);
+  const [active, setActive] = useState(true);
   const widget = Widget();
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header
-        headerLeft={(
-          <TouchableOpacity
-            style={{
-              padding: 10,
-            }}
-            onPress={() => {
-              setShowAlert(true)
-            }}>
-            <Icon name="close" size={22} color="#000000"/>
-          </TouchableOpacity>
-        )}
-        headerRight={(
-          <TouchableOpacity
-            style={{
-              padding: 10,
-            }}
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.dispatch(StackActions.pop(1));
-              }
-            }}>
-            <Icon name="circledowno" size={22} color="#000000"/>
-          </TouchableOpacity>
-        )}
-      />,
+      header: () => <SafeAreaView>
+        <Header
+          headerLeft={(
+            <TouchableOpacity
+              style={{
+                padding: 10,
+              }}
+              onPress={() => {
+                setShowAlert(true);
+              }}>
+              <Icon name="close" size={22} color="#000000"/>
+            </TouchableOpacity>
+          )}
+          headerRight={(
+            <TouchableOpacity
+              style={{
+                padding: 10,
+              }}
+              onPress={() => {
+                if (navigation.canGoBack()) {
+                  navigation.dispatch(StackActions.pop(1));
+                }
+              }}>
+              <Icon name="circledowno" size={22} color="#000000"/>
+            </TouchableOpacity>
+          )}
+        />
+      </SafeAreaView>,
     });
   }, [navigation]);
 
@@ -203,35 +208,64 @@ function ChatScreen({route, navigation}) {
   };
 
   return (
-    <View style={{
+    <SafeAreaView style={{
       flex: 1,
     }}>
-      <MultichannelWidget
-        sendAttachment={false}
-        onSuccessGetRoom={room => {
-          // console.log(room)
+      <UserInactivity
+        skipKeyboard={true}
+        isActive={active}
+        timeForInactivity={30000}
+        onAction={isActive => {
+          setShowAlertInactivity(true)
         }}
-        onDownload={onDownload}
-        onPressSendAttachment={onPressSendAttachment}
-      />
-      <Dialog.Container visible={showAlert}>
-        <Dialog.Title>End Chat</Dialog.Title>
-        <Dialog.Description>
-          Do you want to end chat.
-        </Dialog.Description>
-        <Dialog.Button
-          label="Cancel"
-          onPress={() => setShowAlert(false)}/>
-        <Dialog.Button
-          label="Yes"
-          onPress={() => {
-            widget.clearUser()
-            if (navigation.canGoBack()) {
-              navigation.dispatch(StackActions.pop(1));
-            }
-          }}/>
-      </Dialog.Container>
-    </View>
+      >
+        <MultichannelWidget
+          sendAttachment={true}
+          onSuccessGetRoom={room => {
+            // console.log(room)
+          }}
+          onDownload={onDownload}
+          onPressSendAttachment={onPressSendAttachment}
+        />
+        <Dialog.Container visible={showAlert}>
+          <Dialog.Title>End Chat</Dialog.Title>
+          <Dialog.Description>
+            Do you want to end chat.
+          </Dialog.Description>
+          <Dialog.Button
+            label="Cancel"
+            onPress={() => setShowAlert(false)}/>
+          <Dialog.Button
+            label="Yes"
+            onPress={() => {
+              widget.clearUser();
+              if (navigation.canGoBack()) {
+                navigation.dispatch(StackActions.pop(1));
+              }
+            }}/>
+        </Dialog.Container>
+        <Dialog.Container visible={showAlertInactivity}>
+          <Dialog.Title>You are inactive</Dialog.Title>
+          <Dialog.Description>
+            Are you going to end this chat
+          </Dialog.Description>
+          <Dialog.Button
+            label="Cancel"
+            onPress={() => {
+              setActive(true)
+              setShowAlertInactivity(false)
+            }}/>
+          <Dialog.Button
+            label="Yes"
+            onPress={() => {
+              widget.clearUser();
+              if (navigation.canGoBack()) {
+                navigation.dispatch(StackActions.pop(1));
+              }
+            }}/>
+        </Dialog.Container>
+      </UserInactivity>
+    </SafeAreaView>
   );
 }
 
