@@ -220,7 +220,7 @@ function ChatScreen({route, navigation}) {
         }}
       >
         <MultichannelWidget
-          sendAttachment={false}
+          sendAttachment={true}
           onSuccessGetRoom={room => {
             // console.log(room)
           }}
