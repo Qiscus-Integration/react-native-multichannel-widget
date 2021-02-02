@@ -90,7 +90,11 @@ widget.setup(AppId, {
 - **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
 - **`renderSendMessage`** _(Object)_ - Extra props to be custom Component button Send Message
 - **`placeholder`** _(String)_ - Extra props to be custom placeholder, default `Type a message...`
-     
+- **`renderTickSent`** _(Object)_ - Extra props to be custom Component Tick Sent
+- **`renderTickDelivered`** _(Object)_ - Extra props to be custom Component Tick Delivered
+- **`renderTickRead`** _(Object)_ - Extra props to be custom Component Tick Read
+- **`renderTickPending`** _(Object)_ - Extra props to be custom Component Tick Pending
+
 ## Example App
 Example folder contains an example app to demonstrate how to use this package.
 
