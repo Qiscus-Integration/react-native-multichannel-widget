@@ -17,7 +17,7 @@ const HomeScreen = ({route, navigation}) => {
           }}
           onPress={() => {
             navigation.replace('Login');
-            widget.clearUser();
+            widget.endSession();
             AsyncStorage.removeItem('Name');
             AsyncStorage.removeItem('Email');
           }}>

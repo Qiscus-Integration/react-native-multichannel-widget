@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
-import {Linking, Platform, Text, TouchableOpacity, View, SafeAreaView} from 'react-native';
+import {Linking, Platform, SafeAreaView, TouchableOpacity} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import Widget, {
   Header,
   MultichannelWidget,
+  Qiscus
 } from '@qiscus-integration/react-native-multichannel-widget';
 import {StackActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Dialog from 'react-native-dialog';
 import UserInactivity from 'react-native-user-inactivity';
+import {endSessionChat} from '../helpers/Utils';
 
 function ChatScreen({route, navigation}) {
   const [showAlert, setShowAlert] = useState(false);
@@ -207,6 +209,14 @@ function ChatScreen({route, navigation}) {
     }
   };
 
+  const resolve = () =>{
+    let roomId = Qiscus.qiscus.selected?.id
+    let tokenSdk = Qiscus.qiscus.userData.token
+    if(roomId && tokenSdk){
+      endSessionChat(roomId, tokenSdk)
+    }
+    widget.endSession();
+  }
   return (
     <SafeAreaView style={{
       flex: 1,
@@ -238,7 +248,7 @@ function ChatScreen({route, navigation}) {
           <Dialog.Button
             label="Yes"
             onPress={() => {
-              widget.clearUser();
+              resolve()
               if (navigation.canGoBack()) {
                 navigation.dispatch(StackActions.pop(1));
               }
@@ -258,7 +268,7 @@ function ChatScreen({route, navigation}) {
           <Dialog.Button
             label="Yes"
             onPress={() => {
-              widget.clearUser();
+              resolve()
               if (navigation.canGoBack()) {
                 navigation.dispatch(StackActions.pop(1));
               }
