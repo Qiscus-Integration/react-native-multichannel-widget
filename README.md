@@ -103,9 +103,9 @@ Example folder contains an example app to demonstrate how to use this package.
 widget.getUnreadCount(callback)
 ```
 
-## Remove current user
+## Remove session
 ```
-widget.clearUser()
+widget.endSession()
 ```
 ## Remove Notification
 ```
