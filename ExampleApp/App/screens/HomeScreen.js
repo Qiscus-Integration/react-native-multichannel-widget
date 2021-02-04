@@ -27,8 +27,9 @@ const HomeScreen = ({route, navigation}) => {
     });
   }, [navigation]);
 
-  const [name, setName] = useState('yoga');
-  const [email, setEmail] = useState('yoga@mail.com');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const widget = Widget();
   const {roomId} = widget.state;
 
@@ -42,6 +43,11 @@ const HomeScreen = ({route, navigation}) => {
         setEmail(toProperCase(value));
       });
 
+    AsyncStorage.getItem('FcmToken')
+      .then(value => {
+        setFcmToken(value);
+      });
+
     PushNotification.configure({
       onNotification: function(notification) {
         openChat()
@@ -52,7 +58,7 @@ const HomeScreen = ({route, navigation}) => {
 
   const openChat = () => {
     if(!roomId){
-      widget.initiateChat(email, name, localStorage.getItem('FCM_TOKEN'))
+      widget.initiateChat(email, name, fcmToken)
         .then(data => {
           //console.log(data)
         })
