@@ -35,3 +35,7 @@ babel.config.js
 environment.js.sample
 
 screenshot.png
+
+*.tgz
+.env
+.env*
