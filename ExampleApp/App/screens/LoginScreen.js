@@ -75,7 +75,7 @@ function LoginScreen({navigation}) {
     if (enabled) {
       clearNotification();
       const token = await messaging().getToken();
-      localStorage.setItem('FCM_TOKEN', token);
+      AsyncStorage.setItem('FcmToken', token.toString())
       messaging().onMessage(async remoteMessage => {
         const {title, body} = remoteMessage.notification;
         PushNotification.localNotification({
