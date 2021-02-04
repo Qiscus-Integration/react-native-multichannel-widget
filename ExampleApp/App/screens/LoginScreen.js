@@ -39,11 +39,7 @@ function LoginScreen({navigation}) {
   const _setEmail = value => AsyncStorage.setItem('Email', value.toString());
 
   useEffect(() => {
-    widget.setup(APP_ID, {
-      //title: 'Customer Service',
-      //subtitle: 'ready to serve',
-      //avatar : 'https://www.qiscus.com/images/faveicon.png'
-    });
+    widget.setup(APP_ID);
     let name = ''
     let email = ''
     setTimeout(() => {
