@@ -173,7 +173,7 @@ At the logout action from the app, you need to implement removeNotification meth
 widget.removeNotification('FCM_TOKEN')
 ```
 
-> *FCM_TOKEN is the same value when first initiation in step:* [3. Initialization Chat](#) link
+> *FCM_TOKEN is the same value when first initiation in step:* [3. Initialization Chat](#3-initialization-chat) link
 
 ## Get Qiscus SDK Service
 
