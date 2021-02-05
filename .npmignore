@@ -39,3 +39,7 @@ screenshot.png
 *.tgz
 .env
 .env*
+
+image.png
+image1.png
+image2.png
