@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {toProperCase} from '../helpers/Utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Text} from 'react-native-paper';
-import Widget from '@qiscus-integration/react-native-multichannel-widget';
+import Widget from '@qiscus-community/react-native-multichannel-widget';
 import * as PushNotification from 'react-native-push-notification';
 
 const HomeScreen = ({route, navigation}) => {

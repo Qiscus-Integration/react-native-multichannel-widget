@@ -6,7 +6,7 @@ import Widget, {
   Header,
   MultichannelWidget,
   Qiscus
-} from '@qiscus-integration/react-native-multichannel-widget';
+} from '@qiscus-community/react-native-multichannel-widget';
 import {StackActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Dialog from 'react-native-dialog';

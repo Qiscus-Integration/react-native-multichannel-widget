@@ -1,7 +1,7 @@
 import {Image, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import Widget from '@qiscus-integration/react-native-multichannel-widget';
+import Widget from '@qiscus-community/react-native-multichannel-widget';
 
 const ChatButtonOverlay = ({children}) => {
   const navigation = useNavigation();

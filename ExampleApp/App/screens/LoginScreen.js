@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import Widget from '@qiscus-integration/react-native-multichannel-widget';
+import Widget from '@qiscus-community/react-native-multichannel-widget';
 import messaging from '@react-native-firebase/messaging';
 import {clearNotification} from '../helpers/NotificationHelper';
 import * as PushNotification from 'react-native-push-notification';

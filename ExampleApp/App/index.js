@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import ChatScreen from './screens/ChatScreen';
 import {Provider} from 'react-native-paper';
-import {MultichannelWidgetProvider} from '@qiscus-integration/react-native-multichannel-widget';
+import {MultichannelWidgetProvider} from '@qiscus-community/react-native-multichannel-widget';
 import LoginScreen from './screens/LoginScreen';
 import {Text, View} from 'react-native';
 import ChatButtonOverlay from './common/ChatButtonOverlay';
