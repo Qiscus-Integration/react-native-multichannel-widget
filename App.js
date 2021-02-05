@@ -10,11 +10,7 @@ import {APP_ID, USER_ID, NAME, DEVICE_ID} from "react-native-dotenv"
 function Sample() {
   const widget = Widget();
   useEffect(() => {
-    widget.setup(APP_ID, {
-      //title: 'selamat datang',
-      //subtitle: 'ready to serve',
-      //avatar : 'https://avatars0.githubusercontent.com/u/3271668?s=60&u=5f4d6d9ce12f2aa0ffbaf4a9c9428ccd00f8b0ef&v=4'
-    });
+    widget.setup(APP_ID);
 
     widget.initiateChat(USER_ID, NAME, DEVICE_ID)
       .then(data => {

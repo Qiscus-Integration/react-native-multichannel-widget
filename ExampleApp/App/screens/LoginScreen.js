@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import Widget from '@qiscus-integration/react-native-multichannel-widget';
+import Widget from '@qiscus-community/react-native-multichannel-widget';
 import messaging from '@react-native-firebase/messaging';
 import {clearNotification} from '../helpers/NotificationHelper';
 import * as PushNotification from 'react-native-push-notification';
@@ -39,11 +39,7 @@ function LoginScreen({navigation}) {
   const _setEmail = value => AsyncStorage.setItem('Email', value.toString());
 
   useEffect(() => {
-    widget.setup(APP_ID, {
-      //title: 'Customer Service',
-      //subtitle: 'ready to serve',
-      //avatar : 'https://www.qiscus.com/images/faveicon.png'
-    });
+    widget.setup(APP_ID);
     let name = ''
     let email = ''
     setTimeout(() => {
