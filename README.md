@@ -61,7 +61,7 @@ let options = {
 widget.setup(AppId,options);
 ```
 
-[Refrensi : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/LoginScreen.js#L42)
+[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/LoginScreen.js#L42)
 
 
 > ***AppId Qiscus*** *used to initiate chat applications in qiscus, further related to AppId :* [*https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information*](https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information)
