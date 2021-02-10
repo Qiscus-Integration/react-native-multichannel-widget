@@ -146,6 +146,7 @@ Using chat room component
 * `renderTickDelivered` *(Object)* - Extra props to be custom Component Tick Delivered
 * `renderTickRead` *(Object)* - Extra props to be custom Component Tick Read
 * `renderTickPending` *(Object)* - Extra props to be custom Component Tick Pending
+* `filterMessage` *(Function(message))* - Extra props to filter list message
 
 [Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/ChatScreen.js#L222)
 
