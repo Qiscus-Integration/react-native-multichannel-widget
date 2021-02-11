@@ -234,6 +234,7 @@ function ChatScreen({route, navigation}) {
           onSuccessGetRoom={room => {
             // console.log(room)
           }}
+          //filterMessage={message=> message?.payload?.payload?.type !== 'resolve_conversation'}
           onDownload={onDownload}
           onPressSendAttachment={onPressSendAttachment}
         />
