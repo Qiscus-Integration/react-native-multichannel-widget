@@ -46,19 +46,22 @@ Initiate widget for first time
 
 ```
 import Widget from '@qiscus-community/react-native-multichannel-widget';
-
+const ScreenChat = () => {
 const widget = Widget();
+useEffect(()=>{
+    //optional params
+    let options = {
+      baseURLMultichannel: // custom base url Multichannel
+      baseURLSdk: // custom base url SDK
+      mqttURLSdk: // custom mqtt url SDK
+      brokerLbURLSdk: // custom broker LB url SDK
+      uploadURLSdk: // custom uploader url SDK
+    }
+    widget.setup(AppId,options);
+},[])    
+....
+};
 
-//optional params
-let options = {
-  baseURLMultichannel: // custom base url Multichannel
-  baseURLSdk: // custom base url SDK
-  mqttURLSdk: // custom mqtt url SDK
-  brokerLbURLSdk: // custom broker LB url SDK
-  uploadURLSdk: // custom uploader url SDK
-}
-    
-widget.setup(AppId,options);
 ```
 
 [Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/LoginScreen.js#L42)
