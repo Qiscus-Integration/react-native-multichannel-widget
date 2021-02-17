@@ -18,7 +18,7 @@
 ## Installation
 
 * Using npm `npm i @qiscus-community/react-native-multichannel-widget`
-* Using yarn `yarn install @qiscus-community/react-native-multichannel-widget`
+* Using yarn `yarn add @qiscus-community/react-native-multichannel-widget`
 
 ## Configuration Widget
 
