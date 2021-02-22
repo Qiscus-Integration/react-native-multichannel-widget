@@ -143,7 +143,6 @@ Using chat room component
 * `onDownload` *(Function)* - Callback when a download message attachment is tapped
 * `renderSendAttachment` *(Object)* - Extra props to be custom Component button Send Attachment
 * `renderSendMessage` *(Object)* - Extra props to be custom Component button Send Message
-* `renderSendMessage` *(Object)* - Extra props to be custom Component button Send Message
 * `placeholder` *(String)* - Extra props to be custom placeholder, default `Type a message...`
 * `renderTickSent` *(Object)* - Extra props to be custom Component Tick Sent
 * `renderTickDelivered` *(Object)* - Extra props to be custom Component Tick Delivered
