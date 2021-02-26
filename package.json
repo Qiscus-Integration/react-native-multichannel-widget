@@ -1,6 +1,6 @@
 {
   "name": "@qiscus-community/react-native-multichannel-widget",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "RN multichannel widget (Build in UI)",
   "main": "lib/index.js",
   "scripts": {
