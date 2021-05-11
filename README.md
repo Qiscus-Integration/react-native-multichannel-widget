@@ -38,16 +38,15 @@ return (
 );
 ```
 
-[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/index.js#L67)
+[Reference : ExampleApp](ExampleApp/App/index.js#lines-70:74)
 
 ### 2. Initialization Widget 
 
 Initiate widget for first time
 
 ```
-import Widget from '@qiscus-community/react-native-multichannel-widget';
-const ScreenChat = () => {
-const widget = Widget();
+import {Qiscus} from '@qiscus-community/react-native-multichannel-widget';
+const SplashCreen = () => {
 useEffect(()=>{
     //optional params
     let options = {
@@ -57,14 +56,14 @@ useEffect(()=>{
       brokerLbURLSdk: // custom broker LB url SDK
       uploadURLSdk: // custom uploader url SDK
     }
-    widget.setup(AppId,options);
+    Qiscus.setup(AppId,options);
 },[])    
 ....
 };
 
 ```
 
-[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/LoginScreen.js#L42)
+[Reference : ExampleApp](ExampleApp/App/index.js#lines-26)
 
 
 > ***AppId Qiscus*** *used to initiate chat applications in qiscus, further related to AppId :* [*https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information*](https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information)
@@ -74,7 +73,10 @@ useEffect(()=>{
 Initiate room chat
 
 ```
-widget.initiateChat('USER_ID', 'NAME', 'FCM_TOKEN')
+import Widget from '@qiscus-community/react-native-multichannel-widget';
+
+const widget = Widget();
+widget.initiateChat(options)
   .then(result => {
                 
   })
@@ -83,13 +85,49 @@ widget.initiateChat('USER_ID', 'NAME', 'FCM_TOKEN')
   })
 ```
 
-[Reference: ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/HomeScreen.js#L55)
+[Reference: ExampleApp](ExampleApp/App/screens/HomeScreen.js#lines-61)
+
+Input options (object prefered)
+------
+
+| fields          | type                      | required | description                                                                                                                                             |
+| --------------- | ------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| userId          | string                    | true     |  unique identifier of a user                                                                                                                                                       |
+| name            | string                    | true     | display name of a user                                                                                                                                                        |
+| deviceId        | string                    | false    | device token from fcm, used for push notification needs |
+| extras          | json_string/ json_object  | false    | eg: {"data_source": "us"}                                                                                                             |
+| additionalInfo  | json_string/ json_object  | false    | it will fill the user properties bar on the right side of customer room |
+| messageExtras  | json__string/ json_object  | false    | will fill the information on message extras                                                                                                                          |
+| channelId      | integer                    | false    |optional, init chat on target channel_id                                                                         |
+
+Example
 
 ```
-# Description
-USER_ID   : unique indentifier of a user
-NAME      : display name of a user
-FCM_TOKEN : device token from fcm, used for push notification needs
+const USER_ID = "user01@mail.com"
+const NAME = "user01"
+const FCM_TOKEN = "12345678"
+const USER_EXTRAS = {
+    user_id: "user01",
+    is_priority: true
+}
+const ADDISIONAL_INFO = {
+"full name" : "Linda",
+"email" : "linda@mail.com"
+}
+let options = {
+    userId : USER_ID,
+    name : NAME,
+    deviceId: FCM_TOKEN,
+    extras: USER_EXTRAS,
+    additionalInfo: ADDISIONAL_INFO
+}
+widget.initiateChat(options)
+  .then(result => {
+                
+  })
+  .catch(e => {
+                
+  })
 ```
 
 ### 4. Use Header Component
@@ -119,7 +157,7 @@ Using component header
 * `style` *(Object)* - Extra props to be passed custom style header
 * `textColor` *(String)* - Custom text color header
 
-[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/ChatScreen.js#L22)
+[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-37)
 
 ### 5. Use Chat Room Component
 
@@ -140,6 +178,7 @@ Using chat room component
 
 * `onSuccessGetRoom` *(Function(`room`))* - Callback when success get room
 * `onPressSendAttachment` *(Function)* - Callback when button Send Attachment is tapped
+* `onPressVideo` *(Function)* -  Callback when button media player is tapped
 * `onDownload` *(Function)* - Callback when a download message attachment is tapped
 * `renderSendAttachment` *(Object)* - Extra props to be custom Component button Send Attachment
 * `renderSendMessage` *(Object)* - Extra props to be custom Component button Send Message
@@ -149,8 +188,10 @@ Using chat room component
 * `renderTickRead` *(Object)* - Extra props to be custom Component Tick Read
 * `renderTickPending` *(Object)* - Extra props to be custom Component Tick Pending
 * `filterMessage` *(Function(message))* - Extra props to filter list message
+* `avatar` *(Object)* -  Extra props to be passed Component to custom avatar
+* `onTyping` *(Function)* -  Callback when a user typing
 
-[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/ExampleApp/App/screens/ChatScreen.js#L222)
+[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-183)
 
 ## Get Unread Message Count
 
@@ -178,6 +219,11 @@ widget.removeNotification('FCM_TOKEN')
 
 > *FCM_TOKEN is the same value when first initiation in step:* [3. Initialization Chat](#3-initialization-chat) link
 
+## Change Language
+To change the language you can use changeLanguage method with input en for English and id for Indonesia.
+```
+widget.changeLanguage("en")
+```
 ## Get Qiscus SDK Service
 
 To get Qiscus functionalities, you can import Qiscus like below.
@@ -195,17 +241,17 @@ let room = Qiscus.qiscus.selected
 
 for more methods related qiscus sdk service, you can read on this link : https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/lib/services/qiscus/index.js
 
-[Reference : ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/develop/ExampleApp/App/screens/ChatScreen.js#L213-L214)
+[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-163)
 
 ## Example App
 
-[ExampleApp](https://github.com/Qiscus-Integration/react-native-multichannel-widget/tree/master/ExampleApp) folder contains an example app to demonstrate how to use this package.
+[ExampleApp](master/ExampleApp) folder contains an example app to demonstrate how to use this package.
 
 **How to run the example app** 
 
 * Clone or download this repo
 * Open ExampleApp directory
-* create new file with name `.env` file like .[env_sample](https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/develop/ExampleApp/.env_sample) add **APP_ID** with your Multichannel AppId
+* create new file with name `.env` file like .[env_sample](ExampleApp/.env_sample) add **APP_ID** with your Multichannel AppId
 * Open your terminal or cmd and execute `npm install` command
 * To run the Example App you need to execute `react-native run-android` command and wait for the process to complete
 
@@ -218,4 +264,3 @@ https://documentation.qiscus.com/multichannel-customer-service/settings-and-conf
 
 * Multichannel Mobile in app widget from scratch : https://documentation.qiscus.com/multichannel-customer-service/channel-integration#mobile-in-app-widget
 * Mobile App push notification : https://documentation.qiscus.com/multichannel-customer-service/channel-integration#mobile-app-push-notification
-
