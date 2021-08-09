@@ -1,4 +1,4 @@
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Widget from '@qiscus-community/react-native-multichannel-widget';
@@ -17,31 +17,37 @@ const ChatButtonOverlay = ({children}) => {
           position: 'absolute',
           bottom: 10,
           right: 20,
-          backgroundColor: '#fff',
           width: 100,
           height: 100,
-          paddingRight: 10,
-          paddingBottom: 10,
           borderRadius: 100,
           alignItems: 'center',
           justifyContent: 'center',
           alignContent: 'center',
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 4,
-          },
-          shadowOpacity: 0.30,
-          shadowRadius: 4.65,
-
-          elevation: 8,
         }}>
+        {unReadCount > 0 && <View style={{
+          position: 'absolute',
+          bottom: 60,
+          right: 10,
+          width: 20,
+          height: 20,
+          justifyContent: 'center',
+          borderRadius: 60 / 2,
+          backgroundColor: '#f15a22',
+          zIndex: 1,
+        }}>
+          <Text style={{
+            alignSelf: 'center',
+            fontWeight: 'bold',
+            color: 'white',
+            fontSize: 9,
+          }}>{unReadCount}</Text>
+        </View>}
         <Image
           style={{
             width: 75,
             height: 75,
           }}
-          source={unReadCount > 0 ? require('../images/cs-new-message.png') : require('../images/cs.png')}
+          source={require('../images/floating_chat_mini.png')}
         />
       </TouchableOpacity>}
     </View>

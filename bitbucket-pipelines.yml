@@ -1,0 +1,28 @@
+image: reactnativecommunity/react-native-android
+
+pipelines:
+  branches:
+    '{master,build}':
+      - step:
+          name: release apk
+          script:
+            - npm i json --dev
+            - npm run pack
+            - cd ExampleApp
+            - printf "APP_ID=$APP_ID\nRESOLVE_API=$RESOLVE_API\nCHANNEL_ID=$CHANNEL_ID" > .env
+            - cat .env
+            - npm i ../qiscus-community-react-native-multichannel-widget-*
+            - npm install
+            - cd android && chmod +x gradlew
+            - ./gradlew assembleRelease
+            - export BUILD_DATE=`date "+%Y/%m/%d@%H:%M:%S"`
+            - mv "./app/build/outputs/apk/release/app-release.apk" "./app-${BITBUCKET_BRANCH}-${BITBUCKET_BUILD_NUMBER}.apk"
+            -  >-
+              curl -F file=@"app-${BITBUCKET_BRANCH}-${BITBUCKET_BUILD_NUMBER}.apk"
+              -F channels=$CHANNEL_SLACK
+              -F "initial_comment=Pipeline Build on $BUILD_DATE"
+              -H "Authorization: Bearer $AUTH_SLACK_BOT"
+              https://slack.com/api/files.upload
+
+          artifacts:
+            - ExampleApp/android/app/build/outputs/apk/release/**
