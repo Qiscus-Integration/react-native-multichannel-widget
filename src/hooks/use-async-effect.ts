@@ -4,9 +4,12 @@ type IEffect<T> = (isMountedCb: () => boolean) => PromiseLike<T> | T;
 type IDestroy<T> = (value: T) => void;
 type IInput = unknown[];
 
-export function useAsyncEffect<T>(effect: IEffect<T>, destroy?: IDestroy<T>, inputs?: IInput) {
+export function useAsyncEffect<T>(
+  effect: IEffect<T>,
+  destroy?: IDestroy<T>,
+  inputs?: IInput
+) {
   const hasDestroy = typeof destroy === 'function';
-  const _inputs = inputs ?? [];
 
   useEffect(
     function () {
@@ -28,6 +31,6 @@ export function useAsyncEffect<T>(effect: IEffect<T>, destroy?: IDestroy<T>, inp
         }
       };
     },
-    [destroy, ..._inputs]
+    [destroy, inputs, effect, hasDestroy]
   );
 }

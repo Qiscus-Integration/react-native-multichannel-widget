@@ -30,7 +30,7 @@ export default function MessageItemVideo({ item }: IProps) {
     videoRef.current?.setOnPlaybackStatusUpdate((status) =>
       console.log('@status', status)
     );
-  }, [videoRef.current]);
+  }, []);
 
   const currentUser = useCurrentUser();
   const isSelf = useMemo(
