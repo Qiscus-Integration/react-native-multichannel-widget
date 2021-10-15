@@ -1,266 +1,190 @@
-<p align="center">
-    <a href="#">
-      <img src="./image.png" alt=""  width="260" height="510" />
-    </a>
-</p>
-
-<h3 align="center">
-  React Native Multichannel Widget
-</h3>
-<p align="center">
-  The most complete chat UI Multichannel for React Native
-</p>
+# [Widget] Documentation React Native
 
 ## Requirements
 
-* React Native Version >= 0.59
+- ReactNative: ^0.63.4
+
+## Dependency
+
+- @react-native-async-storage/async-storage: ^1.15.9
+- react-native-document-picker: ^7.1.0
 
 ## Installation
 
-* Using npm `npm i @qiscus-community/react-native-multichannel-widget`
-* Using yarn `yarn add @qiscus-community/react-native-multichannel-widget`
-
-## Configuration Widget
-
-### 1. Add `MultichannelWidgetProvider` in App.js
-
-We use Hooks to synchronize data. To make it work we have to explicitly insert a mount point in your app like this:
-
 ```
-// in your entry file like `App.js`
-import {MultichannelWidgetProvider} from '@qiscus-community/react-native-multichannel-widget';
+# Qiscus Multichannel main package
+yarn add @qiscus-community/react-native-multichannel-widget
 
-// in your render function 
-return (
-  <MultichannelWidgetProvider>  // <- use MultichannelWidgetProvider
-    <App />
-  </MultichannelWidgetProvider>
-);
+# Dependencies required for qiscus multichannel
+yarn add @react-native-async-storage/async-storage react-native-document-picker
 ```
 
-[Reference : ExampleApp](ExampleApp/App/index.js#lines-70:74)
+## How To Use
 
-### 2. Initialization Widget 
+### Initialization
 
-Initiate widget for first time
+In order to use `QiscusMultichannelWidge`t, you need to initialize it with your AppID (`YOUR_APP_ID`). Get more information to get AppID from [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/)
 
-```
-import {Qiscus} from '@qiscus-community/react-native-multichannel-widget';
-const SplashCreen = () => {
-useEffect(()=>{
-    //optional params
-    let options = {
-      baseURLMultichannel: // custom base url Multichannel
-      baseURLSdk: // custom base url SDK
-      mqttURLSdk: // custom mqtt url SDK
-      brokerLbURLSdk: // custom broker LB url SDK
-      uploadURLSdk: // custom uploader url SDK
-    }
-    Qiscus.setup(AppId,options);
-},[])    
-....
-};
-
+```javascript
+// Wrap your outer most component with `MultichannelWidgetProvider`
+// for example
+import { MultichannelWidgetProvider } from '@qiscus-community/react-native-multichannel-widget';
+<MultichannelWidgetProvider appId={APP_ID}>
+  <App />
+</MultichannelWidgetProvider>;
 ```
 
-[Reference : ExampleApp](ExampleApp/App/index.js#lines-26)
+After the initialization, you can access all the widget's functions.
 
+### Set The User
 
-> ***AppId Qiscus*** *used to initiate chat applications in qiscus, further related to AppId :* [*https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information*](https://documentation.qiscus.com/latest/multichannel-customer-service/settings-and-configuration#app-information)
+Set UserId before start the chat, this is mandatory.
 
-### 3. Initialization Chat
+```javascript
+import { useMultichannelWidget } from '@qiscus-community/react-native-multichannel-widget';
 
-Initiate room chat
+// ... inside your component
+const widget = useMultichannelWidget();
+widget.setUser({
+  userId: 'unique-user-id',
+  displayName: 'Display Name for this user',
+  avatarUrl: 'https://via.placeholder.com/200',
+});
 
+// if you want to set user properties
+widget.setUser({
+  userId: 'unique-user-id',
+  displayName: 'Display Name for this user',
+  avatarUrl: 'https://via.placeholder.com/200',
+  userProperties: {
+    extra_property_key: 'extra property value',
+  },
+});
 ```
-import Widget from '@qiscus-community/react-native-multichannel-widget';
 
-const widget = Widget();
-widget.initiateChat(options)
-  .then(result => {
-                
-  })
-  .catch(e => {
-                
-  })
+### Get Login Status
+
+Use this function to check whether the user has already logged in.
+
+```javascript
+import { useCurrentUser } from '@qiscus-community/react-native-multichannel-widget';
+
+// ... inside your component
+const user = useCurrentUser();
+
+// check user value null or not
+const isLoggedIn = useMemo(() => user == null, [user]);
 ```
 
-[Reference: ExampleApp](ExampleApp/App/screens/HomeScreen.js#lines-61)
+### Start Chat
 
-Input options (object prefered)
-------
+Use this function to start a chat.
 
-| fields          | type                      | required | description                                                                                                                                             |
-| --------------- | ------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| userId          | string                    | true     |  unique identifier of a user                                                                                                                                                       |
-| name            | string                    | true     | display name of a user                                                                                                                                                        |
-| deviceId        | string                    | false    | device token from fcm, used for push notification needs |
-| extras          | json_string/ json_object  | false    | eg: {"data_source": "us"}                                                                                                             |
-| additionalInfo  | json_string/ json_object  | false    | it will fill the user properties bar on the right side of customer room |
-| messageExtras  | json__string/ json_object  | false    | will fill the information on message extras                                                                                                                          |
-| channelId      | integer                    | false    |optional, init chat on target channel_id                                                                         |
-
-Example
-
-```
-const USER_ID = "user01@mail.com"
-const NAME = "user01"
-const FCM_TOKEN = "12345678"
-const USER_EXTRAS = {
-    user_id: "user01",
-    is_priority: true
+```javascript
+widget
+  .initiateChat()
+  .then(() => console.log('success initiating chat'))
+  .catch((e: unknown) => console.error('error while initiating chat'));
 }
-const ADDISIONAL_INFO = {
-"full name" : "Linda",
-"email" : "linda@mail.com"
-}
-let options = {
-    userId : USER_ID,
-    name : NAME,
-    deviceId: FCM_TOKEN,
-    extras: USER_EXTRAS,
-    additionalInfo: ADDISIONAL_INFO
-}
-widget.initiateChat(options)
-  .then(result => {
-                
-  })
-  .catch(e => {
-                
-  })
 ```
 
-### 4. Use Header Component
+### Clear User
 
-Using component header
+Use this function to clear the logged-in users.
 
-<kbd><img src="image1.png" /></kbd>
-
-```
-<Header
-  height={56}
-  style={{
-    backgroundColor : 'orange'
-  }}
-  textColor = 'white'
-/>
+```javascript
+widget.clearUser();
 ```
 
-**Props**
+### Hide system message
 
-* `title` *(String)* - Custom title
-* `subtitle` *(String)* - Custom subtitle
-* `avatar` *(Object)* -  Extra props to be passed Component to custom avatar
-* `height` *(Integer)* - Height of the Header, default is `56`
-* `headerRight` *(Object)* - Extra props to be passed Component to the Right Header
-* `headerLeft` *(Object)* - Extra props to be passed Component to the Left Header
-* `style` *(Object)* - Extra props to be passed custom style header
-* `textColor` *(String)* - Custom text color header
+configure system message visibility by calling setShowSystemMessage(isShowing: Bool).
 
-[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-37)
-
-### 5. Use Chat Room Component
-
-Using chat room component
-
-<kbd><img src="image2.png" width="260" height="510" /></kbd>
-
-```
-<MultichannelWidget
-  onSuccessGetRoom={room => {
-  }}
-  onDownload={onDownload}
-  onPressSendAttachment={onPressSendAttachment}
-/>
+```javascript
+widget.setHideUIEvent();
 ```
 
-**Props**
+## Customization
 
-* `onSuccessGetRoom` *(Function(`room`))* - Callback when success get room
-* `onPressSendAttachment` *(Function)* - Callback when button Send Attachment is tapped
-* `onPressVideo` *(Function)* -  Callback when button media player is tapped
-* `onDownload` *(Function)* - Callback when a download message attachment is tapped
-* `renderSendAttachment` *(Object)* - Extra props to be custom Component button Send Attachment
-* `renderSendMessage` *(Object)* - Extra props to be custom Component button Send Message
-* `placeholder` *(String)* - Extra props to be custom placeholder, default `Type a message...`
-* `renderTickSent` *(Object)* - Extra props to be custom Component Tick Sent
-* `renderTickDelivered` *(Object)* - Extra props to be custom Component Tick Delivered
-* `renderTickRead` *(Object)* - Extra props to be custom Component Tick Read
-* `renderTickPending` *(Object)* - Extra props to be custom Component Tick Pending
-* `filterMessage` *(Function(message))* - Extra props to filter list message
-* `avatar` *(Object)* -  Extra props to be passed Component to custom avatar
-* `onTyping` *(Function)* -  Callback when a user typing
+We provide several functions to customize the User Interface.
 
-[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-183)
+### Config
 
-## Get Unread Message Count
+Use this method to configure the widget properties.
+Channel Id is an identity for each widget channel. If you have a specific widget channel that you want to integrate into the mobile in-app widget, you can add your channel_id when you do initiateChat.
 
-To get unread message count, you can use getUnreadCount method like below.
+| Method Name                         | Description                                                      |
+| ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| setRoomTitle                        | Set room name base on customer's name or static default.         |
+| setRoomSubTitle                     |                                                                  |
+|                                     | setRoomSubTitle(IRoomSubtitleConfig.Enabled)                     | Set enable room sub name by the system.          |
+|                                     | setRoomSubTitle(IRoomSubtitleConfig.Disabled)                    | Set disable room sub name.                       |
+|                                     | setRoomSubTitle(IRoomSubtitleConfig.Editable, "Custom subtitle") | Set enable room sub name base on static default. |
+| setHideUIEvent                      | Show/hide system event.                                          |
+| setAvatar                           |                                                                  |
+|                                     | setAvatar(IAvatarConfig.Enable)                                  | Set enable avatar and name                       |
+|                                     | setAvatar(IAvatarConfig.Disabled)                                | Set disable avatar and name                      |
+| setEnableNotification               | Set enable app notification.                                     |
+| setChannelId(channelId: channel_id) | Use this function to set your widget channel Id                  |
+
+### Color
+
+| Method Name                     | Description                                                  |
+| ------------------------------- | ------------------------------------------------------------ |
+| setNavigationColor              | Set navigation color.                                        |
+| setNavigationTitleColor         | Set room title, room subtitle, and back button border color. |
+| setSendContainerColor           | Set icon send border-color.                                  |
+| setSendContainerBackgroundColor | Set send container background-color.                         |
+| setFieldChatBorderColor         | Set field chat border-color.                                 |
+| setFieldChatTextColor           | Set field chat text color.                                   |
+| setSystemEventTextColor         | Set system event text and border color.                      |
+| setLeftBubbleColor              | Set left bubble chat color (for: Admin, Supervisor, Agent).  |
+| setLeftBubbleTextColor          | Set left bubble text color (for: Admin, Supervisor, Agent).  |
+| setRightBubbleColor             | Set right bubble chat color (Customer).                      |
+| setRightBubbleTextColor         | Set right bubble text color (Customer).                      |
+| setTimeLabelTextColor           | Set time text color.                                         |
+| setTimeBackgroundColor          | Set time background color.                                   |
+| setBaseColor                    | Set background color of the room chat.                       |
+| setEmptyTextColor               | Set empty state text color.                                  |
+| setEmptyBackgroundColor         | Set empty state background color.                            |
+
+![Color Customization Image](/Readme/colorConfig.png)
+
+## How to Run the Example
+
+1. **Get your APPID**
+
+- Go to [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/) to register your email
+- Log in to Qiscus Multichannel Chat with yout email and password
+- Go to ‘Setting’ menu on the left bar
+- Look for ‘App Information’
+- You can find APPID in the App Info
+
+2. **Activate Qiscus Widget Integration**
+
+- Go to ‘Integration’ menu on the left bar
+- Look for ‘Qiscus Widget’
+- Slide the toggle to activate the Qiscus widget
+
+3. **Run npm install**
+
+After cloning the example, you need to run this code to install all C*ocoapods* dependencies needed by the Example
 
 ```
-widget.getUnreadCount(callback)
+yarn
 ```
 
-## End Session User
+4. **Set YOUR_APP_ID in the Example**
 
-To request end session or end chat, you can use endSession method like below.
+- Open example/src/App.tsx
+- Replace the `APP_ID` at line 12 with your appId
 
-```
-widget.endSession()
-```
-
-## Remove Notification
-
-At the logout action from the app, you need to implement removeNotification method like below to remove FCM_TOKEN from Qiscus Server, that means Qiscus Server not sending push notifications again to the device.
-
-```
-widget.removeNotification('FCM_TOKEN')
+```javascript
+<MultichannelWidgetProvider appId={APP_ID}>
+  <App />
+</MultichannelWidgetProvider>
 ```
 
-> *FCM_TOKEN is the same value when first initiation in step:* [3. Initialization Chat](#3-initialization-chat) link
+5. **Start Chat**
 
-## Change Language
-To change the language you can use changeLanguage method with input en for English and id for Indonesia.
-```
-widget.changeLanguage("en")
-```
-## Get Qiscus SDK Service
-
-To get Qiscus functionalities, you can import Qiscus like below.
-
-```
-import {Qiscus} from '@qiscus-community/react-native-multichannel-widget';
-```
-
-```
-// another example to get room object from qiscus
-import {Qiscus} from '@qiscus-community/react-native-multichannel-widget';
-
-let room = Qiscus.qiscus.selected
-```
-
-for more methods related qiscus sdk service, you can read on this link : https://github.com/Qiscus-Integration/react-native-multichannel-widget/blob/master/lib/services/qiscus/index.js
-
-[Reference : ExampleApp](ExampleApp/App/screens/ChatScreen.js#lines-163)
-
-## Example App
-
-[ExampleApp](master/ExampleApp) folder contains an example app to demonstrate how to use this package.
-
-**How to run the example app** 
-
-* Clone or download this repo
-* Open ExampleApp directory
-* create new file with name `.env` file like .[env_sample](ExampleApp/.env_sample) add **APP_ID** with your Multichannel AppId
-* Open your terminal or cmd and execute `npm install` command
-* To run the Example App you need to execute `react-native run-android` command and wait for the process to complete
-
-## Push Notification
-
-To implement push notification in react native widget you need to add FCM Key in notifications setting, below is how to do it, you need to read in “**Android's Customer Widget Push Notification”** section
-https://documentation.qiscus.com/multichannel-customer-service/settings-and-configuration#notifications 
-
-## References
-
-* Multichannel Mobile in app widget from scratch : https://documentation.qiscus.com/multichannel-customer-service/channel-integration#mobile-in-app-widget
-* Mobile App push notification : https://documentation.qiscus.com/multichannel-customer-service/channel-integration#mobile-app-push-notification
+The Example is ready to use. You can start to chat with your agent from the Qiscus Multichannel Chat dashboard.
