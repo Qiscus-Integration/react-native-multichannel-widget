@@ -8,7 +8,7 @@ export { useOnMessageDelivered } from './use-on-message-delivered';
 export { useOnMessageRead } from './use-on-message-read';
 export { useMessages } from './use-messages';
 export { useSetup } from './use-setup';
-export { useEndSession } from './use-end-session';
+export { useClearUser } from './use-clear-user';
 export { useOnUserTyping } from './use-on-user-typing';
 export { useQiscus } from './use-qiscus';
 export { useDeleteMessage } from './use-delete-message';

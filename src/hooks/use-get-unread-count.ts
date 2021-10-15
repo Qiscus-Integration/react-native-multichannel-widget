@@ -1,10 +1,10 @@
-import { qiscusAtom, unreadCountAtom } from '../state';
+import { qiscusAtom } from '../state';
 import { useAtomCallback } from 'jotai/utils';
 
 export function useGetUnreadCount() {
-  let cb = useAtomCallback(async (get, set) => {
+  let cb = useAtomCallback(async (get, _set) => {
     let unreadCount = await get(qiscusAtom).getTotalUnreadCount();
-    set(unreadCountAtom, unreadCount);
+    // set(unreadCountAtom, unreadCount);
 
     return unreadCount;
   });

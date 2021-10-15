@@ -5,6 +5,7 @@ import {
   appIdAtom,
   baseColorThemeAtom,
   channelIdAtom,
+  currentUserAtom,
   deviceIdAtom,
   emptyBackgroundColorThemeAtom,
   emptyTextColorThemeAtom,
@@ -12,7 +13,6 @@ import {
   fieldChatTextColorThemeAtom,
   leftBubbleColorThemeAtom,
   leftBubbleTextColorThemeAtom,
-  loginCheckedAtom,
   navigationColorThemeAtom,
   navigationTitleColorThemeAtom,
   notificationEnabledAtom,
@@ -41,6 +41,7 @@ import type {
 import { IAvatarConfig } from '../types';
 import { useAtomCallbackWithDeps } from './use-atom-callback-with-deps';
 import { useClearUser } from './use-clear-user';
+import { useComputedAtomValue } from './use-computed-atom-value';
 import { useDebounceValue } from './use-debounce-value';
 import { useInitiateChat } from './use-initiate-chat';
 import { useSetUser } from './use-set-user';
@@ -96,7 +97,9 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
     emptyBackgroundColorThemeAtom
   );
 
-  const isLoggedIn = useAtomValue(loginCheckedAtom);
+  const isLoggedIn = useComputedAtomValue(
+    (get) => get(currentUserAtom) != null
+  );
   const setup = useSetup();
   const initiateChat_ = useInitiateChat();
   const setUser = useSetUser();

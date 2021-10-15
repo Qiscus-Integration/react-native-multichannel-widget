@@ -11,7 +11,7 @@ export {
   useDebounceValue,
   useDeleteMessage,
   useDifference,
-  useEndSession,
+  useClearUser,
   useGetUnreadCount,
   useInitiateChat,
   useLoadMoreMessages,

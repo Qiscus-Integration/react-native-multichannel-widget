@@ -4,7 +4,6 @@ import { atomWithImmer } from 'jotai/immer';
 import QiscusSDK from 'qiscus-sdk-javascript';
 import type {
   Account,
-  AppState,
   InitiateChatOptions,
   Message,
   Room,

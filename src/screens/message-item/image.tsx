@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Autolink } from 'react-native-autolink';
+import { ChatBubble } from '../../components/chat-bubble/index';
 import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
 import { useCurrentUser } from '../../hooks/use-current-user';
 import {
@@ -9,8 +10,6 @@ import {
   rightBubbleColorThemeAtom,
   rightBubbleTextColorThemeAtom,
 } from '../../state';
-import { useQiscus } from '../../hooks/use-qiscus';
-import { ChatBubble } from '../../components/chat-bubble/index';
 import type { Message } from '../../types';
 
 type MessageItemImageProps = {
@@ -18,7 +17,6 @@ type MessageItemImageProps = {
   onTap?: () => void;
 };
 export function MessageItemImage(props: MessageItemImageProps) {
-  const qiscus = useQiscus();
   const payload: Record<string, unknown> = useMemo(
     () => props.item.payload!,
     [props.item]
