@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAtomCallback } from 'jotai/utils';
 import { useCallback } from 'react';
 import {
+  appIdAtom,
   currentUserAtom,
   lastUserTokenAtom,
   optionsAtom,
@@ -31,6 +32,7 @@ export function useSetup(): (
       let { appId, options } = arg;
       const qiscus = get(qiscusAtom);
 
+      const lastAppId = await AsyncStorage.getItem(STORAGE.lastAppId);
       const lastUserData: Account | undefined = await AsyncStorage.getItem(
         STORAGE.lastUserData
       ).then((it) => (it != null ? JSON.parse(it) : undefined));
@@ -38,6 +40,7 @@ export function useSetup(): (
       const lastRoomId = await AsyncStorage.getItem(STORAGE.lastRoomId);
 
       if (lastUserData != null && lastUserToken != null) {
+        set(appIdAtom, lastAppId!);
         setUser({
           userId: lastUserData.id,
           displayName: lastUserData.name,
@@ -48,6 +51,8 @@ export function useSetup(): (
         set(currentUserAtom, lastUserData);
 
         // Internal code should not be used unless you know what you are doing
+        // @ts-ignore
+        qiscus.storage.setAppId(lastAppId!);
         // @ts-ignore
         qiscus.storage.setCurrentUser(lastUserData);
         // @ts-ignore

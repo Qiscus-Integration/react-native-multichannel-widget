@@ -59,6 +59,7 @@ export const STORAGE = {
   lastRoomId: 'MultichannelWidget::last-room-id',
   lastUserData: 'MultichannelWidget::last-user-data',
   lastUserToken: 'MultichannelWidget::last-user-token',
+  lastAppId: 'MultichannelWidget::last-app-id',
 };
 export const lastInitiateChatParamsAtom = atom<InitiateChatOptions | undefined>(
   undefined

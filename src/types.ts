@@ -3,10 +3,14 @@ import type {
   IQAccount as Account,
   IQUser as User,
   IQChatRoom as Room,
-  IQMessage as Message,
+  IQMessage,
   IQParticipant as Participant,
 } from 'qiscus-sdk-javascript';
-export type { QiscusSDK, Message, Room, User, Account, Participant };
+export type { QiscusSDK, Room, User, Account, Participant };
+
+export type Message = {
+  type: IQMessage['type'] | 'carousel';
+} & IQMessage;
 
 export enum IRoomSubtitleConfig {
   Enabled = 'enabled',
@@ -129,4 +133,25 @@ export type IUseCurrentChatRoom = {
   sendMessage(message: Message): Promise<Message>;
   deleteMessage(messageUniqueIds: string[]): Promise<Message[]>;
   loadMoreMessages(lastMessageId: number): Promise<Message[]>;
+};
+
+// Carousel types
+export type CardAction = {
+  type: 'postback' | 'link';
+  postback_text?: string;
+  payload: {
+    url: string;
+    method: 'get' | 'post';
+    payload: Record<string, unknown>;
+  };
+};
+export type CardButton = {
+  label: string;
+} & CardAction;
+export type Card = {
+  image: string;
+  title: string;
+  description: string;
+  default_action: CardAction;
+  buttons: CardButton[];
 };

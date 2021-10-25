@@ -1,4 +1,5 @@
 import { useAtomCallback } from 'jotai/utils';
+import type { Message, Room } from '../types';
 import {
   avatarAtom,
   currentUserAtom,
@@ -12,12 +13,19 @@ import {
 export function useUpdateRoomInfo() {
   let cb = useAtomCallback(async (get, set) => {
     const qiscus = get(qiscusAtom);
+    let currentUser = get(currentUserAtom);
     let roomId = get(roomIdAtom);
 
-    if (roomId == null) return null;
+    if (roomId == null) {
+      return [null, [] as Message[]] as [Room | null, Message[]];
+    }
 
     let [room, messages] = await qiscus.getChatRoomWithMessages(roomId!);
-    let currentUser = get(currentUserAtom);
+    await qiscus
+      .getPreviousMessagesById(room.id, 20, messages[0]?.id)
+      .then((msgs) => {
+        messages.push(...msgs);
+      });
 
     set(roomAtom, (item) => {
       return { ...item, ...room };
@@ -45,7 +53,7 @@ export function useUpdateRoomInfo() {
     set(subtitleAtom, subtitle.join(', '));
     set(avatarAtom, avatar);
 
-    return room;
+    return [room, messages] as [Room | null, Message[]];
   });
 
   return cb;

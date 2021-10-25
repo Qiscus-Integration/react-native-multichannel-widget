@@ -26,14 +26,15 @@ export function useInitiateChat() {
     const lastRoomId = get(roomIdAtom);
 
     if (currentUser != null && lastRoomId != null) {
-      const [room, messages] = await qiscus.getChatRoomWithMessages(lastRoomId);
-      const lastMessageText1 = room.lastMessage?.text;
+      const [room, messages] = await updateRoomInfo();
+
+      const lastMessageText1 = room?.lastMessage?.text;
       const lastMessageText2 = messages[messages.length - 1]?.text;
 
       const lastMessageResolved = [lastMessageText1, lastMessageText2]
         .map((it) => it?.toLowerCase())
         .some((it) => it?.includes(resolvedText) === true);
-      const roomExtrasResolved = room.extras?.is_resolved === true;
+      const roomExtrasResolved = room?.extras?.is_resolved === true;
 
       const isResolved = roomExtrasResolved || lastMessageResolved;
       const isSessional = isResolved ? await getSessions() : false;
@@ -43,7 +44,7 @@ export function useInitiateChat() {
       );
       if (!isSessional) {
         console.log('room are not sessional, using existing room');
-        await updateRoomInfo();
+        // await updateRoomInfo();
         return currentUser;
       }
     }
@@ -80,6 +81,7 @@ export function useInitiateChat() {
       [STORAGE.lastUserId, user.id],
       [STORAGE.lastUserData, JSON.stringify(user)],
       [STORAGE.lastUserToken, userToken],
+      [STORAGE.lastAppId, qiscus.appId],
     ]);
 
     if (arg.deviceId != null) {
@@ -91,8 +93,6 @@ export function useInitiateChat() {
     set(currentUserAtom, (_) => user);
 
     await updateRoomInfo();
-
-    // console.log('qiscus', JSON.stringify(qiscus.storage, null, 2));
 
     return user;
   });

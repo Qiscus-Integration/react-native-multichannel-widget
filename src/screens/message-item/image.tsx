@@ -1,15 +1,9 @@
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Autolink } from 'react-native-autolink';
+import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
+import { useBubbleFgColor } from '../../hooks/use-bubble-fg-color';
 import { ChatBubble } from '../../components/chat-bubble/index';
-import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
-import { useCurrentUser } from '../../hooks/use-current-user';
-import {
-  leftBubbleColorThemeAtom,
-  leftBubbleTextColorThemeAtom,
-  rightBubbleColorThemeAtom,
-  rightBubbleTextColorThemeAtom,
-} from '../../state';
 import type { Message } from '../../types';
 
 type MessageItemImageProps = {
@@ -22,23 +16,9 @@ export function MessageItemImage(props: MessageItemImageProps) {
     [props.item]
   );
 
-  const currentUser = useCurrentUser();
-  const isSelf = useMemo(
-    () => props.item.sender.id === currentUser?.id,
-    [currentUser?.id, props.item]
-  );
+  const bubbleBgColor = useBubbleBgColor(props.item.sender.id);
+  const bubbleFgColor = useBubbleFgColor(props.item.sender.id);
 
-  const bubbleBgColor = useComputedAtomValue((get) => {
-    return isSelf
-      ? get(rightBubbleColorThemeAtom)
-      : get(leftBubbleColorThemeAtom);
-  });
-
-  const bubbleFgColor = useComputedAtomValue((get) => {
-    return isSelf
-      ? get(rightBubbleTextColorThemeAtom)
-      : get(leftBubbleTextColorThemeAtom);
-  });
   const url = useMemo(
     () =>
       (payload.url as string | undefined)?.replace(

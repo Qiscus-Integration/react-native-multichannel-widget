@@ -16,9 +16,11 @@ import {
 import { MessageForm } from './message-form';
 import { MessageList } from './message-list';
 
-type MultichannelWidgetProps = {};
+type MultichannelWidgetProps = {
+  onBack: () => void;
+};
 
-export function MultichannelWidget(_props: MultichannelWidgetProps) {
+export function MultichannelWidget(props: MultichannelWidgetProps) {
   const qiscus = useQiscus();
   const { room, messages, sendMessage, loadMoreMessages } =
     useCurrentChatRoom();
@@ -54,7 +56,6 @@ export function MultichannelWidget(_props: MultichannelWidgetProps) {
           console.log(error);
         }
         if (progress != null) {
-          // Update progress
           console.log('progress', progress);
         }
         if (url != null) {
@@ -101,7 +102,11 @@ export function MultichannelWidget(_props: MultichannelWidgetProps) {
   return (
     <View style={{ flex: 1, position: 'relative', marginTop: 0 }}>
       <View style={styles.container}>
-        <Header title={appTitle} subtitle={appSubtitleText} />
+        <Header
+          title={appTitle}
+          subtitle={appSubtitleText}
+          onBack={props.onBack}
+        />
         {isEmpty && <EmptyChat />}
         {!isEmpty && (
           <MessageList messages={messages ?? []} onLoadMore={onLoadMore} />

@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import invariant from 'invariant';
-import { useAtomValue, useUpdateAtom } from 'jotai/utils';
-import { useCallback } from 'react';
+import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useCallback, useEffect } from 'react';
 import {
   appIdAtom,
   baseColorThemeAtom,
@@ -11,13 +12,16 @@ import {
   emptyTextColorThemeAtom,
   fieldChatBorderColorThemeAtom,
   fieldChatTextColorThemeAtom,
+  lastUserTokenAtom,
   leftBubbleColorThemeAtom,
   leftBubbleTextColorThemeAtom,
   navigationColorThemeAtom,
   navigationTitleColorThemeAtom,
   notificationEnabledAtom,
+  qiscusAtom,
   rightBubbleColorThemeAtom,
   rightBubbleTextColorThemeAtom,
+  roomIdAtom,
   roomSenderAvatarEnabledAtom,
   roomSubtitleConfigAtom,
   roomSubtitleTextAtom,
@@ -25,6 +29,7 @@ import {
   roomTitleAtom,
   sendContainerBackgroundColorThemeAtom,
   sendContainerColorThemeAtom,
+  STORAGE,
   systemEventTextColorThemeAtom,
   timeBackgroundColorThemeAtom,
   timeLabelTextColorThemeAtom,
@@ -34,6 +39,7 @@ import {
   userConfigPropertiesAtom,
 } from '../state';
 import type {
+  Account,
   IChatRoomConfigSetter,
   IRoomSubtitleConfig,
   IUseMultichannelWidget,
@@ -46,6 +52,7 @@ import { useDebounceValue } from './use-debounce-value';
 import { useInitiateChat } from './use-initiate-chat';
 import { useSetUser } from './use-set-user';
 import { useSetup } from './use-setup';
+import { useUpdateRoomInfo } from './use-update-room-info';
 
 export function useMultichannelWidget(): IUseMultichannelWidget {
   const setEnableNotification = useUpdateAtom(notificationEnabledAtom);
@@ -97,12 +104,13 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
     emptyBackgroundColorThemeAtom
   );
 
-  const isLoggedIn = useComputedAtomValue(
-    (get) => get(currentUserAtom) != null
-  );
+  const isLoggedIn = useComputedAtomValue((get) => {
+    return get(currentUserAtom) != null;
+  });
   const setup = useSetup();
   const initiateChat_ = useInitiateChat();
   const setUser = useSetUser();
+  const updateRoomInfo = useUpdateRoomInfo();
 
   const appId = useAtomValue(appIdAtom);
   const initiateChat = useAtomCallbackWithDeps(
@@ -153,6 +161,43 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
     set(roomSenderAvatarEnabledAtom, arg === IAvatarConfig.Enabled);
   }, []);
   const clearUser = useClearUser();
+
+  const initialSetup = useAtomCallback(async (get, set) => {
+    const qiscus = get(qiscusAtom);
+    const lastUserData: Account | undefined = await AsyncStorage.getItem(
+      STORAGE.lastUserData
+    ).then((it) => (it != null ? JSON.parse(it) : undefined));
+    const lastUserToken = await AsyncStorage.getItem(STORAGE.lastUserToken);
+    const lastRoomId = await AsyncStorage.getItem(STORAGE.lastRoomId);
+    const lastAppId = await AsyncStorage.getItem(STORAGE.lastAppId);
+
+    if (lastUserData != null && lastUserToken != null) {
+      setUser({
+        userId: lastUserData.id,
+        displayName: lastUserData.name,
+        avatarUrl: lastUserData.avatarUrl,
+        userProperties: lastUserData.extras,
+      });
+      set(lastUserTokenAtom, lastUserToken);
+      set(currentUserAtom, lastUserData);
+
+      // Internal code should not be used unless you know what you are doing
+      // @ts-ignore
+      qiscus.storage.setAppId(lastAppId);
+      // @ts-ignore
+      qiscus.storage.setCurrentUser(lastUserData);
+      // @ts-ignore
+      qiscus.storage.setToken(lastUserToken);
+    }
+    if (lastRoomId != null) set(roomIdAtom, parseInt(lastRoomId, 10));
+
+    await updateRoomInfo();
+  });
+
+  useEffect(() => {
+    initialSetup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return useDebounceValue(
     {

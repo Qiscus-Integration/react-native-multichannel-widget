@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RESET, useAtomCallback } from 'jotai/utils';
 import {
   channelIdAtom,
@@ -9,6 +10,7 @@ import {
   qiscusAtom,
   roomAtom,
   roomIdAtom,
+  STORAGE,
   userConfigAvatarAtom,
   userConfigDisplayNameAtom,
   userConfigIdAtom,
@@ -33,6 +35,12 @@ export function useClearUser() {
 
     get(qiscusAtom).clearUser();
     if (room != null) get(qiscusAtom).unsubscribeChatRoom(room);
+
+    await AsyncStorage.multiRemove([
+      STORAGE.lastUserData,
+      STORAGE.lastUserToken,
+      STORAGE.lastRoomId,
+    ]);
   });
 
   return cb;

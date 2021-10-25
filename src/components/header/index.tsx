@@ -28,9 +28,10 @@ type IProps = {
   height?: number;
   title?: string;
   subtitle?: string;
+  onBack: () => void;
 };
 
-export function Header({ height, title, subtitle }: IProps) {
+export function Header({ height, title, subtitle, onBack }: IProps) {
   const navigationBgColor = useAtomValue(navigationColorThemeAtom);
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     const style = { ...styles.container, backgroundColor: navigationBgColor };
@@ -40,7 +41,7 @@ export function Header({ height, title, subtitle }: IProps) {
 
   return (
     <View style={containerStyle}>
-      <TouchableOpacity style={styles.backBtn}>
+      <TouchableOpacity style={styles.backBtn} onPress={onBack}>
         <Image source={require('../../assets/arrow-left.png')} />
         <Avatar />
       </TouchableOpacity>

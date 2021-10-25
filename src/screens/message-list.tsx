@@ -6,6 +6,7 @@ import React, { useCallback, useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { baseColorThemeAtom, emptyTextColorThemeAtom } from '../state';
 import type { Message } from '../types';
+import { MessageItemCarousel } from './message-item/carousel';
 import { MessageItemImage } from './message-item/image';
 import { MessageItemSystemEvent } from './message-item/system-event';
 import { MessageItemText } from './message-item/text';
@@ -39,10 +40,14 @@ export function MessageList(props: MessageListProps) {
     //   return <MessageItemVideo item={item} />;
     // }
 
+    if (item.type === 'carousel') {
+      return <MessageItemCarousel item={item} />;
+    }
+
     if (item.type === 'system_event') {
-      // console.log(JSON.stringify(item, null, 2));
       return <MessageItemSystemEvent item={item} />;
     }
+
     return <MessageItemText item={item} />;
   }, []);
 

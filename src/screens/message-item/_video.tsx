@@ -1,19 +1,13 @@
 // @ts-nocheck
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import Autolink from 'react-native-autolink';
 import { Video } from 'expo-av';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import Autolink from 'react-native-autolink';
+import { useBubbleBgColor } from '../hooks/use-bubble-bg-color';
+import { useBubbleFgColor } from '../hooks/use-bubble-fg-color';
 import { ChatBubble } from '../../components/chat-bubble/index';
 import type { Message } from '../../types';
-import { useCurrentUser } from '../../hooks/use-current-user';
-import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
-import {
-  leftBubbleColorThemeAtom,
-  leftBubbleTextColorThemeAtom,
-  rightBubbleColorThemeAtom,
-  rightBubbleTextColorThemeAtom,
-} from '../../state';
 
 type IProps = {
   item: Message;
@@ -32,23 +26,8 @@ export default function MessageItemVideo({ item }: IProps) {
     );
   }, []);
 
-  const currentUser = useCurrentUser();
-  const isSelf = useMemo(
-    () => item.sender.id === currentUser?.id,
-    [currentUser?.id, item?.sender]
-  );
-
-  const bubbleBgColor = useComputedAtomValue((get) => {
-    return isSelf
-      ? get(rightBubbleColorThemeAtom)
-      : get(leftBubbleColorThemeAtom);
-  });
-
-  const bubbleFgColor = useComputedAtomValue((get) => {
-    return isSelf
-      ? get(rightBubbleTextColorThemeAtom)
-      : get(leftBubbleTextColorThemeAtom);
-  });
+  const bubbleBgColor = useBubbleBgColor(item.sender.id);
+  const bubbleFgColor = useBubbleFgColor(item.sender.id);
 
   return (
     <ChatBubble message={item} withoutContainer>

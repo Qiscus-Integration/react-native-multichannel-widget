@@ -2,11 +2,9 @@ import format from 'date-fns/format';
 import { useAtomValue } from 'jotai/utils';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
+import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
 import { useCurrentUser } from '../../hooks/use-current-user';
 import {
-  leftBubbleColorThemeAtom,
-  rightBubbleColorThemeAtom,
   roomSenderAvatarEnabledAtom,
   timeBackgroundColorThemeAtom,
   timeLabelTextColorThemeAtom,
@@ -35,11 +33,7 @@ export function ChatBubble(props: IProps) {
   );
   const status = useMemo(() => props.message.status, [props.message]);
 
-  const bubbleBgColor = useComputedAtomValue((get) => {
-    return isSelf
-      ? get(rightBubbleColorThemeAtom)
-      : get(leftBubbleColorThemeAtom);
-  });
+  const bubbleBgColor = useBubbleBgColor(props.message.sender?.id);
   const timeFgColor = useAtomValue(timeLabelTextColorThemeAtom);
   const timeBgColor = useAtomValue(timeBackgroundColorThemeAtom);
   const showAvatar = useAtomValue(roomSenderAvatarEnabledAtom);
