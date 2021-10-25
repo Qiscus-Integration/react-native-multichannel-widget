@@ -747,6 +747,18 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@qiscus-community/react-native-multichannel-widget@file:..":
+  version "2.0.1-beta.0"
+  dependencies:
+    "@gorhom/portal" "^1.0.9"
+    date-fns "^2.25.0"
+    immer "^9.0.6"
+    invariant "^2.2.4"
+    jotai "^1.3.9"
+    lodash "^4.17.21"
+    qiscus-sdk-javascript "^3.3.0-5"
+    react-native-autolink "^4.0.0"
+
 "@react-native-async-storage/async-storage@^1.15.9":
   version "1.15.9"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.9.tgz#744ecd566f108e86b6b59e617c23fdb4b8d53358"
@@ -3974,18 +3986,6 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
-
-"rn-multichannel-widget@file:..":
-  version "0.1.0"
-  dependencies:
-    "@gorhom/portal" "^1.0.9"
-    date-fns "^2.25.0"
-    immer "^9.0.6"
-    invariant "^2.2.4"
-    jotai "^1.3.9"
-    lodash "^4.17.21"
-    qiscus-sdk-javascript "^3.3.0-5"
-    react-native-autolink "^4.0.0"
 
 rsvp@^4.8.4:
   version "4.8.5"
