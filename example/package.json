@@ -9,11 +9,15 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@qiscus-community/react-native-multichannel-widget": "file:..",
     "@react-native-async-storage/async-storage": "^1.15.9",
+    "@react-native-firebase/app": "^13.0.0",
+    "@react-native-firebase/messaging": "^13.0.0",
     "react": "17.0.2",
     "react-native": "0.63.4",
     "react-native-document-picker": "^7.1.0",
-    "@qiscus-community/react-native-multichannel-widget": "file:.."
+    "react-native-push-notification": "^8.1.1",
+    "use-async-effect": "^2.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

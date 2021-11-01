@@ -16,6 +16,8 @@ import {
 } from 'react-native';
 import { Chat } from './Chat';
 import { Login } from './Login';
+import { useFirebase } from './use-firebase';
+import messaging from '@react-native-firebase/messaging';
 
 export const APP_ID = 'akoop-i0xwcb7spjwzhro';
 export const CHANNEL_ID = '123812';
@@ -32,6 +34,8 @@ export default function Container() {
 }
 
 function App() {
+  useFirebase();
+
   const portal = usePortal();
   const widget = useMultichannelWidget();
   const currentUser = useCurrentUser();
@@ -57,11 +61,13 @@ function App() {
         {currentUser == null && (
           <Login
             onLogin={async (userId, displayName) => {
+              const deviceId = await messaging().getToken();
               widget.setUser({
                 userId: userId,
                 displayName: displayName,
               });
               widget.setChannelId(CHANNEL_ID);
+              widget.setDeviceId(deviceId);
 
               widget
                 .initiateChat()
