@@ -51,7 +51,7 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
 
   const onImageSelected = useCallback(
     async (v: DocumentPickerResponse) => {
-      qiscus.upload(v, (error, progress, url) => {
+      qiscus.upload(v as any, (error, progress, url) => {
         if (error != null) {
           console.log(error);
         }
@@ -75,7 +75,7 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
   );
   const onDocumentSelected = useCallback(
     async (v: DocumentPickerResponse) => {
-      qiscus.upload(v, (error, progress, url) => {
+      qiscus.upload(v as any, (error, progress, url) => {
         if (error != null) {
           console.log(error);
         }

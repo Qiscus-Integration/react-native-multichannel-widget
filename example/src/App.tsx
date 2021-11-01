@@ -49,6 +49,8 @@ function App() {
     return () => BackHandler.removeEventListener('hardwareBackPress', listener);
   }, [currentUser, widget]);
 
+  useEffect(() => {}, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <>
