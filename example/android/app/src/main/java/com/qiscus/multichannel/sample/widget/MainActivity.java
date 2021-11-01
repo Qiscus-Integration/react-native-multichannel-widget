@@ -1,4 +1,4 @@
-package com.example.reactnativemultichannelwidget;
+package com.qiscus.multichannel.sample.widget;
 
 import com.facebook.react.ReactActivity;
 
