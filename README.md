@@ -114,11 +114,11 @@ Use this method to configure the widget properties.
 Channel Id is an identity for each widget channel. If you have a specific widget channel that you want to integrate into the mobile in-app widget, you can add your channel_id when you do initiateChat.
 
 | Method Name                         | Description                                                      |
-| ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| ----------------------------------- | ---------------------------------------------------------------- |
 | setRoomTitle                        | Set room name base on customer's name or static default.         |
 | setRoomSubTitle                     |                                                                  |
 |                                     | setRoomSubTitle(IRoomSubtitleConfig.Enabled)                     | Set enable room sub name by the system.          |
-|                                     | setRoomSubTitle(IRoomSubtitleConfig.Disabled)                    | Set disable room sub name.                       |
+|                                     | setRoomSubTitle(IRoomSubtitleConfig.Disabled)                    | Set disable room sub name.                      |
 |                                     | setRoomSubTitle(IRoomSubtitleConfig.Editable, "Custom subtitle") | Set enable room sub name base on static default. |
 | setHideUIEvent                      | Show/hide system event.                                          |
 | setAvatar                           |                                                                  |
