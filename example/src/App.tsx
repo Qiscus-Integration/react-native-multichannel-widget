@@ -19,8 +19,8 @@ import { Login } from './Login';
 import { useFirebase } from './use-firebase';
 import messaging from '@react-native-firebase/messaging';
 
-export const APP_ID = 'akoop-i0xwcb7spjwzhro';
-export const CHANNEL_ID = '123812';
+export const APP_ID = 'YOUR_APP_ID';
+export const CHANNEL_ID = 'YOUR_CHANNEL_ID';
 
 export default function Container() {
   return (
@@ -53,20 +53,19 @@ function App() {
     return () => BackHandler.removeEventListener('hardwareBackPress', listener);
   }, [currentUser, widget]);
 
-  useEffect(() => {}, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <>
         {currentUser == null && (
           <Login
             onLogin={async (userId, displayName) => {
-              const deviceId = await messaging().getToken();
               widget.setUser({
                 userId: userId,
                 displayName: displayName,
               });
               widget.setChannelId(CHANNEL_ID);
+
+              const deviceId = await messaging().getToken();
               widget.setDeviceId(deviceId);
 
               widget
