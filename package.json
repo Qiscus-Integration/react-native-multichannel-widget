@@ -1,6 +1,6 @@
 {
   "name": "@qiscus-community/react-native-multichannel-widget",
-  "version": "2.0.2",
+  "version": "2.1.0-0",
   "description": "Qiscus Omnichannel Widget for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
