@@ -11,6 +11,7 @@ import {
   emptyBackgroundColorThemeAtom,
   emptyTextColorThemeAtom,
   fieldChatBorderColorThemeAtom,
+  fieldChatIconColorThemeAtom,
   fieldChatTextColorThemeAtom,
   lastUserTokenAtom,
   leftBubbleColorThemeAtom,
@@ -72,6 +73,9 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
   );
   const set_fieldChatTextColorThemeAtom = useUpdateAtom(
     fieldChatTextColorThemeAtom
+  );
+  const set_fieldChatIconColorThemeAtom = useUpdateAtom(
+    fieldChatIconColorThemeAtom
   );
   const set_sendContainerBackgroundColorThemeAtom = useUpdateAtom(
     sendContainerBackgroundColorThemeAtom
@@ -216,6 +220,7 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
       setSendContainerColor: set_sendContainerColorThemeAtom,
       setFieldChatBorderColor: set_fieldChatBorderColorThemeAtom,
       setFieldChatTextColor: set_fieldChatTextColorThemeAtom,
+      setFieldChatIconColor: set_fieldChatIconColorThemeAtom,
       setSendContainerBackgroundColor:
         set_sendContainerBackgroundColorThemeAtom,
       setNavigationTitleColor: set_navigationTitleColorThemeAtom,

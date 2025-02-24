@@ -83,6 +83,7 @@ export type IThemesSetter = {
   setSendContainerBackgroundColor(color: string): void;
   setFieldChatBorderColor(color: string): void;
   setFieldChatTextColor(color: string): void;
+  setFieldChatIconColor(color: string): void;
 };
 export type IUseMultichannelWidget = INotificationConfig &
   IAuthenticationForm &

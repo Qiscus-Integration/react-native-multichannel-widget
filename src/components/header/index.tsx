@@ -11,6 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
+import IcArrowLeft from '../../icons/arrow-left';
 import {
   currentUserAtom,
   navigationColorThemeAtom,
@@ -32,6 +33,7 @@ type IProps = {
 };
 
 export function Header({ height, title, subtitle, onBack }: IProps) {
+  const navigationFgColor = useAtomValue(navigationTitleColorThemeAtom);
   const navigationBgColor = useAtomValue(navigationColorThemeAtom);
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     const style = { ...styles.container, backgroundColor: navigationBgColor };
@@ -42,7 +44,7 @@ export function Header({ height, title, subtitle, onBack }: IProps) {
   return (
     <View style={containerStyle}>
       <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-        <Image source={require('../../assets/arrow-left.png')} />
+        <IcArrowLeft color={navigationFgColor} />
         <Avatar />
       </TouchableOpacity>
       <View style={styles.contentContainer}>

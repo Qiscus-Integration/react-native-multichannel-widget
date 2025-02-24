@@ -1,15 +1,16 @@
-import React from 'react';
-import { useCallback } from 'react';
-import Picker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { Portal } from '@gorhom/portal';
+import { useAtomValue } from 'jotai/utils';
+import React, { PropsWithChildren, useCallback } from 'react';
 import {
-  Image,
-  ImageProps,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
+import Picker, { DocumentPickerResponse } from 'react-native-document-picker';
+import IcAttachDocument from '../../icons/attach-document';
+import IcAttachImage from '../../icons/attach-image';
+import { fieldChatIconColorThemeAtom } from '../../state';
 
 type IAttachmentMenuProps = {
   onClose: () => void;
@@ -21,6 +22,8 @@ export function AttachmentMenu({
   onImageSelected,
   onDocumentSelected,
 }: IAttachmentMenuProps) {
+  const iconColor = useAtomValue(fieldChatIconColorThemeAtom);
+
   const onPressImage = useCallback(() => {
     Picker.pickSingle({
       allowMultiSelection: false,
@@ -51,16 +54,12 @@ export function AttachmentMenu({
           <View style={styles.backdrop} />
         </TouchableWithoutFeedback>
         <View style={styles.popupContainer}>
-          <AttachmentItem
-            icon={require('../../assets/icon-attach-document.png')}
-            label="File / Document"
-            onPress={onPressDocument}
-          />
-          <AttachmentItem
-            icon={require('../../assets/icon-attach-image.png')}
-            label="Image"
-            onPress={onPressImage}
-          />
+          <AttachmentItem label="File / Document" onPress={onPressDocument}>
+            <IcAttachDocument color={iconColor} />
+          </AttachmentItem>
+          <AttachmentItem label="Image" onPress={onPressImage}>
+            <IcAttachImage color={iconColor} />
+          </AttachmentItem>
           {/* Spacer */}
           <View style={styles.spacer} />
         </View>
@@ -68,19 +67,16 @@ export function AttachmentMenu({
     </Portal>
   );
 }
-function AttachmentItem({
-  icon,
-  label,
-  onPress,
-}: {
-  icon: ImageProps['source'];
+
+type IAttachmentItemProps = PropsWithChildren<{
   label: string;
   onPress: () => void;
-}) {
+}>;
+function AttachmentItem({ label, onPress, children }: IAttachmentItemProps) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.menuItemContainer}>
-        <Image source={icon} />
+        {children}
         <Text style={styles.menuItemLabel}>{label}</Text>
       </View>
     </TouchableWithoutFeedback>

@@ -30,10 +30,6 @@ export {
 export { MultichannelWidget } from './screens/multichannel-widget';
 export { IAvatarConfig, IRoomSubtitleConfig } from './types';
 
-export function multiply(a: number, b: number): Promise<number> {
-  return Promise.resolve(a * b);
-}
-
 const WidgetContext = React.createContext(undefined);
 
 type IWidgetProviderProps = {
