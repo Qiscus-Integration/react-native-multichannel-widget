@@ -1,29 +1,28 @@
 {
   "name": "@qiscus-community/react-native-multichannel-widget-example",
-  "description": "Example app for react-native-multichannel-widget",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start"
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
   },
   "dependencies": {
-    "@qiscus-community/react-native-multichannel-widget": "file:..",
-    "@react-native-async-storage/async-storage": "^1.15.9",
-    "@react-native-community/push-notification-ios": "^1.10.1",
-    "@react-native-firebase/app": "^13.0.0",
-    "@react-native-firebase/messaging": "^13.0.0",
-    "react": "17.0.2",
-    "react-native": "0.63.4",
-    "react-native-document-picker": "^7.1.0",
-    "react-native-push-notification": "^8.1.1",
-    "use-async-effect": "^2.2.3"
+    "@expo/metro-runtime": "~4.0.1",
+    "@react-native-async-storage/async-storage": "^2.1.1",
+    "expo": "~52.0.37",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.7",
+    "react-native-document-picker": "^9.3.1",
+    "react-native-svg": "^15.11.2",
+    "react-native-web": "~0.19.13"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/runtime": "^7.12.5",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "metro-react-native-babel-preset": "^0.64.0"
-  }
+    "@babel/core": "^7.20.0",
+    "react-native-builder-bob": "^0.37.0"
+  },
+  "private": true
 }

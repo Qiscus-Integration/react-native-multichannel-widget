@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useCurrentUserAvatar } from '../../hooks/use-current-user-avatar';
 

@@ -1,6 +1,7 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import { useAtomValue } from 'jotai/utils';
-import React, { PropsWithChildren, useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
 import { useCurrentUser } from '../../hooks/use-current-user';
@@ -99,7 +100,10 @@ export function ChatBubble(props: IProps) {
   );
 }
 
-function Tick(props: { status: 'sent' | 'delivered' | 'read', senderId: string }) {
+function Tick(props: {
+  status: 'sent' | 'delivered' | 'read';
+  senderId: string;
+}) {
   const readColor = useBubbleBgColor(props.senderId);
   const sentColor = useAtomValue(timeLabelTextColorThemeAtom);
 

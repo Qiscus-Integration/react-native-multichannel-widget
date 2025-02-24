@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { Autolink } from 'react-native-autolink';
 import { ChatBubble } from '../../components/chat-bubble/index';

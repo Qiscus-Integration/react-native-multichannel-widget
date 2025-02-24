@@ -1,8 +1,8 @@
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { format } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
 import { useAtomValue } from 'jotai/utils';
 import _, { orderBy } from 'lodash';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { baseColorThemeAtom, emptyTextColorThemeAtom } from '../state';
 import type { Message } from '../types';
@@ -32,7 +32,7 @@ export function MessageList(props: MessageListProps) {
       .value();
   }, [props.messages]);
 
-  const renderItem = useCallback((item) => {
+  const renderItem = useCallback((item: Message) => {
     if (isImage(item)) {
       return <MessageItemImage item={item} />;
     }

@@ -10,8 +10,13 @@ export function useOnMessageRead(cb?: (message: Message) => void): void {
           cb?.(message);
           set(messagesAtom, (items) => {
             for (const key in items) {
-              if (items[key].id <= message.id && items[key].status !== 'read') {
-                items[key].status = 'read';
+              const item = items[key];
+              if (
+                item != null &&
+                item.id <= message.id &&
+                item.status !== 'read'
+              ) {
+                item.status = 'read';
               }
             }
           });

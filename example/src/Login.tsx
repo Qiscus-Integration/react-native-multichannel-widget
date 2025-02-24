@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,8 +12,8 @@ type IProps = {
 };
 
 export function Login(props: IProps) {
-  const [username, setUsername] = React.useState('guest-1001');
-  const [displayName, setDisplayName] = React.useState('Guest 1001');
+  const [username, setUsername] = useState('guest-1001');
+  const [displayName, setDisplayName] = useState('Guest 1001');
 
   return (
     <View style={styles.container}>

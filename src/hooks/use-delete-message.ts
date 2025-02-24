@@ -9,14 +9,11 @@ export function useDeleteMessage(): (
     let data = await get(qiscusAtom).deleteMessages(messageUniqueIds);
 
     set(messagesAtom, (items) => {
-      let newItems = {} as Record<string, Message>;
-      for (let key in items) {
-        if (!messageUniqueIds.includes(key)) {
-          newItems[key] = items[key];
+      for (const uniqueId of messageUniqueIds) {
+        if (Object.hasOwn(items, uniqueId)) {
+          delete items[uniqueId];
         }
       }
-
-      return newItems;
     });
 
     return data;

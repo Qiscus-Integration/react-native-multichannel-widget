@@ -100,4 +100,3 @@ export const sendContainerBackgroundColorThemeAtom = atomWithReset('#FAFAFA');
 export const fieldChatBorderColorThemeAtom = atomWithReset('#E3E3E3');
 export const fieldChatTextColorThemeAtom = atomWithReset('#333');
 export const fieldChatIconColorThemeAtom = atomWithReset('#55B29A');
-

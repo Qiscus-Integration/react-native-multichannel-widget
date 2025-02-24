@@ -8,14 +8,10 @@ export function useOnMessageDeleted(cb?: (message: Message) => void): void {
       return get(qiscusAtom).onMessageDeleted((message) => {
         if (isMounted()) {
           cb?.(message);
+
           set(messagesAtom, (items) => {
-            const newItems = {} as Record<string, Message>;
-            for (let key in items) {
-              if (items[key].uniqueId !== message.uniqueId) {
-                newItems[key] = items[key];
-              } else {
-                cb?.(items[key]);
-              }
+            if (Object.hasOwn(items, message.uniqueId)) {
+              delete items[message.uniqueId];
             }
           });
         }

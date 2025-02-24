@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Autolink } from 'react-native-autolink';
+import { ChatBubble } from '../../components/chat-bubble/index';
 import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
 import { useBubbleFgColor } from '../../hooks/use-bubble-fg-color';
-import { ChatBubble } from '../../components/chat-bubble/index';
 import type { Message } from '../../types';
 
 type MessageItemImageProps = {

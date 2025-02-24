@@ -10,12 +10,14 @@ export function useOnMessageDelivered(cb?: (message: Message) => void): void {
           cb?.(comment);
           set(messagesAtom, (items) => {
             for (const key in items) {
+              const item = items[key];
               if (
-                items[key].id <= comment.id &&
-                items[key].status !== 'delivered' &&
-                items[key].status !== 'read'
+                item != null &&
+                item.id <= comment.id &&
+                item.status !== 'delivered' &&
+                item.status !== 'read'
               ) {
-                items[key].status = 'delivered';
+                item.status = 'delivered';
               }
             }
           });

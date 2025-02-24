@@ -1,6 +1,7 @@
 import { useAtomCallback } from 'jotai/utils';
 import { messagesAtom, qiscusAtom } from '../state';
 import type { Message } from '../types';
+import type { IQMessage } from 'qiscus-sdk-javascript';
 
 export function useSendMessage(): (message: Message) => Promise<Message> {
   return useAtomCallback(async (get, set, message) => {
@@ -8,7 +9,7 @@ export function useSendMessage(): (message: Message) => Promise<Message> {
       throw new Error('Message text can not be empty');
     }
 
-    let m = await get(qiscusAtom).sendMessage(message);
+    let m = await get(qiscusAtom).sendMessage(message as unknown as IQMessage);
 
     if (m != null) {
       set(messagesAtom, (msg) => {
@@ -16,6 +17,6 @@ export function useSendMessage(): (message: Message) => Promise<Message> {
       });
     }
 
-    return m!;
+    return m;
   });
 }

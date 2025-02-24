@@ -1,15 +1,7 @@
 import { useAtomValue } from 'jotai/utils';
-import * as React from 'react';
 import { useMemo } from 'react';
-import {
-  Image,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
 import IcArrowLeft from '../../icons/arrow-left';
 import {

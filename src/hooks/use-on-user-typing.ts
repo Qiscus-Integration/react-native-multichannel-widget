@@ -1,4 +1,5 @@
-import { MutableRefObject, useRef } from 'react';
+import type { MutableRefObject } from 'react';
+import { useRef } from 'react';
 import { qiscusAtom, roomIdAtom, typingStatusAtom } from '../state';
 import { useAtomCallbackSubscription } from './use-atom-callback-subscription';
 

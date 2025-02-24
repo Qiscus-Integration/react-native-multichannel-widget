@@ -4,7 +4,7 @@ import {
   useCurrentUser,
   useMultichannelWidget,
 } from '@qiscus-community/react-native-multichannel-widget';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   BackHandler,
   Platform,
@@ -16,11 +16,15 @@ import {
 } from 'react-native';
 import { Chat } from './Chat';
 import { Login } from './Login';
-import { useFirebase } from './use-firebase';
-import messaging from '@react-native-firebase/messaging';
+// import { useFirebase } from './use-firebase';
+// import messaging from '@react-native-firebase/messaging';
 
-export const APP_ID = 'YOUR_APP_ID';
-export const CHANNEL_ID = 'YOUR_CHANNEL_ID';
+// export const APP_ID = 'YOUR_APP_ID';
+// export const CHANNEL_ID = 'YOUR_CHANNEL_ID';
+
+export const APP_ID = 'wefds-c6f0p2h1cxwz3oq';
+export const CHANNEL_ID = '126962';
+
 
 export default function Container() {
   return (
@@ -34,7 +38,7 @@ export default function Container() {
 }
 
 function App() {
-  useFirebase();
+  // useFirebase();
 
   const portal = usePortal();
   const widget = useMultichannelWidget();
@@ -49,8 +53,8 @@ function App() {
 
       return false;
     }
-    BackHandler.addEventListener('hardwareBackPress', listener);
-    return () => BackHandler.removeEventListener('hardwareBackPress', listener);
+    let subscription = BackHandler.addEventListener('hardwareBackPress', listener);
+    return subscription.remove
   }, [currentUser, widget]);
 
   return (
@@ -59,14 +63,15 @@ function App() {
         {currentUser == null && (
           <Login
             onLogin={async (userId, displayName) => {
+              console.log('@login', userId, displayName)
               widget.setUser({
                 userId: userId,
                 displayName: displayName,
               });
               widget.setChannelId(CHANNEL_ID);
 
-              const deviceId = await messaging().getToken();
-              widget.setDeviceId(deviceId);
+              // const deviceId = await messaging().getToken();
+              // widget.setDeviceId(deviceId);
 
               widget
                 .initiateChat()

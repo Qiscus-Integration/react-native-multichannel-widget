@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai/utils';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import IcAddAttachment from '../icons/add-attachment';
 import IcSendMessage from '../icons/send-message';

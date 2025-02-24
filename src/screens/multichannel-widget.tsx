@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
 import { useAtomValue } from 'jotai/utils';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
@@ -39,7 +39,9 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
     [qiscus, room, sendMessage]
   );
   const onLoadMore = useCallback(async () => {
-    await loadMoreMessages(lastMessageId);
+    if (lastMessageId != null) {
+      await loadMoreMessages(lastMessageId);
+    }
   }, [lastMessageId, loadMoreMessages]);
 
   const appTitle = useAtomValue(roomTitleAtom);
