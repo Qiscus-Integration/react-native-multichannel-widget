@@ -32,6 +32,7 @@ export function AttachmentMenu({
     Picker.pickSingle({
       allowMultiSelection: false,
       type: Picker.types.images,
+      copyTo: 'cachesDirectory',
     })
       .then((v) => onImageSelected(v))
       .then(() => onClose())
@@ -41,6 +42,7 @@ export function AttachmentMenu({
     Picker.pickSingle({
       allowMultiSelection: false,
       type: Picker.types.allFiles,
+      copyTo: 'cachesDirectory',
     })
       .then((v) => onDocumentSelected(v))
       .then(() => onClose())

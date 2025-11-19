@@ -53,12 +53,20 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
 
   const onImageSelected = useCallback(
     async (v: DocumentPickerResponse) => {
-      qiscus.upload(v as any, (error, progress, url) => {
+      // Transform DocumentPickerResponse to file object for Qiscus SDK
+      const fileUri = v.fileCopyUri || v.uri;
+      const file = {
+        uri: fileUri,
+        type: v.type || 'image/jpeg',
+        name: v.name || 'image.jpg',
+      };
+
+      qiscus.upload(file as any, (error, progress, url) => {
         if (error != null) {
-          console.log(error);
+          console.log('[Upload] Error:', error);
         }
         if (progress != null) {
-          console.log('progress', progress);
+          console.log('[Upload] Progress:', progress);
         }
         if (url != null) {
           // Sukses upload
@@ -77,13 +85,20 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
   );
   const onDocumentSelected = useCallback(
     async (v: DocumentPickerResponse) => {
-      qiscus.upload(v as any, (error, progress, url) => {
+      // Transform DocumentPickerResponse to file object for Qiscus SDK
+      const fileUri = v.fileCopyUri || v.uri;
+      const file = {
+        uri: fileUri,
+        type: v.type || 'application/octet-stream',
+        name: v.name || 'document',
+      };
+
+      qiscus.upload(file as any, (error, progress, url) => {
         if (error != null) {
-          console.log(error);
+          console.log('[Upload] Error:', error);
         }
         if (progress != null) {
-          // Update progress
-          console.log('progress', progress);
+          console.log('[Upload] Progress:', progress);
         }
         if (url != null) {
           // Sukses upload
