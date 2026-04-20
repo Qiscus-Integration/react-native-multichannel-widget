@@ -9,14 +9,29 @@ export function useSendMessage(): (message: Message) => Promise<Message> {
       throw new Error('Message text can not be empty');
     }
 
-    let m = await get(qiscusAtom).sendMessage(message as unknown as IQMessage);
+    // Optimistic insert
+    message.status = 'sending';
+    set(messagesAtom, (msg) => {
+      msg[message.uniqueId] = message;
+    });
 
-    if (m != null) {
+    try {
+      let m = await get(qiscusAtom).sendMessage(
+        message as unknown as IQMessage
+      );
+
+      if (m != null) {
+        set(messagesAtom, (msg) => {
+          msg[m.uniqueId] = m as any;
+        });
+      }
+
+      return m as any;
+    } catch (e) {
       set(messagesAtom, (msg) => {
-        msg[m!.uniqueId] = m!;
+        delete msg[message.uniqueId];
       });
+      throw e;
     }
-
-    return m;
   });
 }

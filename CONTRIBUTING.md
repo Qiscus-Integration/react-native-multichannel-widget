@@ -1,124 +1,128 @@
 # Contributing
 
-Contributions are always welcome, no matter how large or small!
+Contributions are always welcome, no matter how large or small.
 
-We want this community to be friendly and respectful to each other. Please follow it in all your interactions with the project. Before contributing, please read the [code of conduct](./CODE_OF_CONDUCT.md).
+Before contributing, read [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 
-## Development workflow
+## Development Workflow
 
-This project is a monorepo managed using [Yarn workspaces](https://yarnpkg.com/features/workspaces). It contains the following packages:
+This project is a monorepo managed with Yarn workspaces:
 
-- The library package in the root directory.
-- An example app in the `example/` directory.
+- Library package in repository root
+- Example app in `example/`
 
-To get started with the project, run `yarn` in the root directory to install the required dependencies for each package:
+Use Yarn 3.6.1 (declared in `package.json`) via Corepack.
 
-```sh
-yarn
-```
+### Prerequisites
 
-> Since the project relies on Yarn workspaces, you cannot use [`npm`](https://github.com/npm/cli) for development.
+- Node.js installed
+- Corepack enabled (`corepack enable`)
+- Android Studio / Xcode if you run native targets
 
-The [example app](/example/) demonstrates usage of the library. You need to run it to test any changes you make.
+### Setup
 
-It is configured to use the local version of the library, so any changes you make to the library's source code will be reflected in the example app. Changes to the library's JavaScript code will be reflected in the example app without a rebuild, but native code changes will require a rebuild of the example app.
-
-You can use various commands from the root directory to work with the project.
-
-To start the packager:
+Run from repository root:
 
 ```sh
-yarn example start
+corepack yarn install
 ```
 
-To run the example app on Android:
+## Quick Start (Example App)
+
+Run from repository root.
+
+1. Start Metro in terminal 1:
 
 ```sh
-yarn example android
+corepack yarn example:metro
 ```
 
-To run the example app on iOS:
+2. Run app in terminal 2:
 
 ```sh
-yarn example ios
+# Android
+corepack yarn example:android
+
+# iOS
+corepack yarn example:ios
+
+# Web
+corepack yarn example:web
 ```
 
-To run the example app on Web:
+Optional Android device picker:
 
 ```sh
-yarn example web
+corepack yarn example:android -- --device
 ```
 
-Make sure your code passes TypeScript and ESLint. Run the following to verify:
+### Troubleshooting
+
+- `sh: expo: command not found`: run `corepack yarn install` first, then run commands from repository root.
+- `No version is set for command yarn`: use `corepack yarn ...`.
+- Native code change not reflected: rebuild app with `corepack yarn example:android` or `corepack yarn example:ios`.
+
+## Local Library Development
+
+The example app is linked to the local library workspace:
+
+- JavaScript/TypeScript changes are reflected without rebuilding native app
+- Native module changes require rebuilding the app target
+
+## Architecture Notes
+
+### Built-In File Attachment Picker
+
+The library uses `@react-native-documents/picker` directly in `src/` for both:
+- image attachment picker
+- document/file attachment picker
+
+`MultichannelWidget` no longer accepts `pickImage` / `pickDocument` props from consumers.
+
+**Rules when contributing:**
+- Keep `@react-native-documents/picker` in `peerDependencies` with a clear compatibility range.
+- Keep image picker limited to image mime type only.
+- Keep document picker limited to non-image document/file mime types.
+- Keep behavior consistent with README usage (consumer only passes `onBack` to `MultichannelWidget`).
+
+## Validation Commands
+
+Run before opening a PR:
 
 ```sh
-yarn typecheck
-yarn lint
+corepack yarn typecheck
+corepack yarn lint
+corepack yarn test
 ```
 
-To fix formatting errors, run the following:
+When you need to regenerate build output (`lib/`):
 
 ```sh
-yarn lint --fix
+corepack yarn prepare
 ```
 
-Remember to add tests for your change if possible. Run the unit tests by:
+## Publishing
+
+This project uses `release-it` for publishing:
 
 ```sh
-yarn test
+corepack yarn release
 ```
 
-### Commit message convention
+## Commit Message Convention
 
-We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for our commit messages:
+We follow [Conventional Commits](https://www.conventionalcommits.org/en):
 
-- `fix`: bug fixes, e.g. fix crash due to deprecated method.
-- `feat`: new features, e.g. add new method to the module.
-- `refactor`: code refactor, e.g. migrate from class components to hooks.
-- `docs`: changes into documentation, e.g. add usage example for the module..
-- `test`: adding or updating tests, e.g. add integration tests using detox.
-- `chore`: tooling changes, e.g. change CI config.
+- `fix`: bug fixes
+- `feat`: new features
+- `refactor`: internal refactor
+- `docs`: documentation changes
+- `test`: test changes
+- `chore`: tooling/config changes
 
-Our pre-commit hooks verify that your commit message matches this format when committing.
+## Pull Request Checklist
 
-### Linting and tests
-
-[ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [TypeScript](https://www.typescriptlang.org/)
-
-We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
-
-Our pre-commit hooks verify that the linter and tests pass when committing.
-
-### Publishing to npm
-
-We use [release-it](https://github.com/release-it/release-it) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
-
-To publish new versions, run the following:
-
-```sh
-yarn release
-```
-
-### Scripts
-
-The `package.json` file contains various scripts for common tasks:
-
-- `yarn`: setup project by installing dependencies.
-- `yarn typecheck`: type-check files with TypeScript.
-- `yarn lint`: lint files with ESLint.
-- `yarn test`: run unit tests with Jest.
-- `yarn example start`: start the Metro server for the example app.
-- `yarn example android`: run the example app on Android.
-- `yarn example ios`: run the example app on iOS.
-
-### Sending a pull request
-
-> **Working on your first pull request?** You can learn how from this _free_ series: [How to Contribute to an Open Source Project on GitHub](https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github).
-
-When you're sending a pull request:
-
-- Prefer small pull requests focused on one change.
-- Verify that linters and tests are passing.
-- Review the documentation to make sure it looks good.
-- Follow the pull request template when opening a pull request.
-- For pull requests that change the API or implementation, discuss with maintainers first by opening an issue.
+- Keep PRs focused and small
+- Run typecheck/lint/tests locally
+- Add or update tests when possible
+- Update docs for behavior/API changes

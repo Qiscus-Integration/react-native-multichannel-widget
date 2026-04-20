@@ -9,7 +9,7 @@ import type {
 export type { QiscusSDK, Room, User, Account, Participant };
 
 export type Message = {
-  type: IQMessage['type'] | 'carousel' | 'system_event';
+  type: IQMessage['type'] | 'carousel' | 'system_event' | 'loading_placeholder';
 } & Omit<IQMessage, 'type'>;
 
 export enum IRoomSubtitleConfig {

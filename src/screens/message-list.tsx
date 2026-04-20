@@ -7,7 +7,9 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { baseColorThemeAtom, emptyTextColorThemeAtom } from '../state';
 import type { Message } from '../types';
 import { MessageItemCarousel } from './message-item/carousel';
+import { MessageItemFile } from './message-item/file';
 import { MessageItemImage } from './message-item/image';
+import { MessageItemLoading } from './message-item/loading';
 import { MessageItemSystemEvent } from './message-item/system-event';
 import { MessageItemText } from './message-item/text';
 
@@ -36,12 +38,19 @@ export function MessageList(props: MessageListProps) {
     if (isImage(item)) {
       return <MessageItemImage item={item} />;
     }
+    if (isFileAttachment(item)) {
+      return <MessageItemFile item={item} />;
+    }
     // if (isVideo(item)) {
     //   return <MessageItemVideo item={item} />;
     // }
 
     if (item.type === 'carousel') {
       return <MessageItemCarousel item={item} />;
+    }
+
+    if (item.type === 'loading_placeholder') {
+      return <MessageItemLoading item={item} />;
     }
 
     if (item.type === 'system_event') {
@@ -108,4 +117,9 @@ function isImage(item: Message) {
   const url = item.text.replace(reAttachment, '').trim();
   const ext = url.match(reExt)?.[1];
   return !!String(ext).match(/jpe?g|png|gif/i);
+}
+
+function isFileAttachment(item: Message) {
+  if (item.type === 'file_attachment') return true;
+  return /\[file]/i.test(item.text) || /\[\/file]/i.test(item.text);
 }

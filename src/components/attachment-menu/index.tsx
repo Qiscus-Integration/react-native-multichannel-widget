@@ -1,10 +1,16 @@
+import {
+  errorCodes,
+  isErrorWithCode,
+  pick,
+  types,
+} from '@react-native-documents/picker';
+import type { DocumentPickerOptionsBase } from '@react-native-documents/picker';
 import { Portal } from '@gorhom/portal';
 import { useAtomValue } from 'jotai/utils';
 import type { PropsWithChildren } from 'react';
 import { useCallback } from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import type { DocumentPickerResponse } from 'react-native-document-picker';
-import Picker from 'react-native-document-picker';
+import type { PickedFile } from '../../types/file-picker';
 import IcAttachDocument from '../../icons/attach-document';
 import IcAttachImage from '../../icons/attach-image';
 import {
@@ -16,9 +22,53 @@ import {
 
 type IAttachmentMenuProps = {
   onClose: () => void;
-  onImageSelected: (v: DocumentPickerResponse) => void;
-  onDocumentSelected: (v: DocumentPickerResponse) => void;
+  /** Called after the user picks an image. */
+  onImageSelected: (v: PickedFile) => void;
+  /** Called after the user picks a document. */
+  onDocumentSelected: (v: PickedFile) => void;
 };
+
+const documentTypes = [
+  types.pdf,
+  types.doc,
+  types.docx,
+  types.xls,
+  types.xlsx,
+  types.ppt,
+  types.pptx,
+  'text/csv',
+  types.plainText,
+  types.json,
+  types.zip,
+] satisfies Exclude<DocumentPickerOptionsBase['type'], undefined>;
+
+async function pickSingleFile(params: {
+  type: Exclude<DocumentPickerOptionsBase['type'], undefined>;
+}) {
+  try {
+    const result = await pick({
+      allowMultiSelection: false,
+      type: params.type,
+    });
+    const first = result[0];
+    if (!first) return null;
+
+    return {
+      uri: first.uri,
+      type: first.type,
+      name: first.name,
+    } satisfies PickedFile;
+  } catch (error) {
+    if (
+      isErrorWithCode(error) &&
+      error.code === errorCodes.OPERATION_CANCELED
+    ) {
+      return null;
+    }
+    throw error;
+  }
+}
+
 export function AttachmentMenu({
   onClose,
   onImageSelected,
@@ -29,23 +79,21 @@ export function AttachmentMenu({
   const iconColor = useAtomValue(fieldChatIconColorThemeAtom);
 
   const onPressImage = useCallback(() => {
-    Picker.pickSingle({
-      allowMultiSelection: false,
-      type: Picker.types.images,
-      copyTo: 'cachesDirectory',
-    })
-      .then((v) => onImageSelected(v))
-      .then(() => onClose())
+    pickSingleFile({ type: types.images })
+      .then((v) => {
+        if (!v) return;
+        onImageSelected(v);
+        onClose();
+      })
       .catch(() => {});
   }, [onClose, onImageSelected]);
   const onPressDocument = useCallback(() => {
-    Picker.pickSingle({
-      allowMultiSelection: false,
-      type: Picker.types.allFiles,
-      copyTo: 'cachesDirectory',
-    })
-      .then((v) => onDocumentSelected(v))
-      .then(() => onClose())
+    pickSingleFile({ type: documentTypes })
+      .then((v) => {
+        if (!v) return;
+        onDocumentSelected(v);
+        onClose();
+      })
       .catch(() => {});
   }, [onClose, onDocumentSelected]);
 

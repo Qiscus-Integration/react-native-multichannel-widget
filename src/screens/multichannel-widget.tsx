@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import type { DocumentPickerResponse } from 'react-native-document-picker';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import type { PickedFile } from '../types/file-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
 import { Header } from '../components/header/index';
 import { useCurrentChatRoom } from '../hooks/use-current-chatroom';
 import { useQiscus } from '../hooks/use-qiscus';
 import {
   baseColorThemeAtom,
+  currentUserAtom,
+  messagesAtom,
   roomSubtitleTextAtom,
   roomTitleAtom,
 } from '../state';
@@ -22,6 +24,8 @@ type MultichannelWidgetProps = {
 
 export function MultichannelWidget(props: MultichannelWidgetProps) {
   const qiscus = useQiscus();
+  const currentUser = useAtomValue(currentUserAtom);
+  const setMessages = useUpdateAtom(messagesAtom);
   const { room, messages, sendMessage, loadMoreMessages } =
     useCurrentChatRoom();
 
@@ -33,7 +37,9 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
           roomId: room.id,
           text,
         });
-        await sendMessage(message);
+        await sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
       }
     },
     [qiscus, room, sendMessage]
@@ -50,70 +56,233 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
   const isEmpty = useMemo(() => messages.length === 0, [messages]);
 
   const [attachmentMenuVisible, setAttachmentMenuVisible] = useState(false);
+  const getUploadConfig = useCallback(() => {
+    const storage = (qiscus as any)?.storage;
+    return {
+      uploadUrl: storage?.getUploadUrl?.() ?? null,
+      token: storage?.getToken?.() ?? null,
+      appId: storage?.getAppId?.() ?? null,
+      sdkVersion: storage?.getVersion?.() ?? null,
+    };
+  }, [qiscus]);
+  const uploadViaSdk = useCallback(
+    (file: { uri: string; type: string; name: string }) =>
+      new Promise<string>((resolve, reject) => {
+        qiscus.upload(file as any, (error, _progress, url) => {
+          if (error != null) {
+            reject(error);
+            return;
+          }
+          if (url != null) {
+            resolve(url);
+          }
+        });
+      }),
+    [qiscus]
+  );
+  const uploadViaFetchFallback = useCallback(
+    async (file: {
+      uri: string;
+      type: string;
+      name: string;
+    }): Promise<string> => {
+      const { uploadUrl, token, appId, sdkVersion } = getUploadConfig();
+      if (!uploadUrl || !token || !appId) {
+        throw new Error('fallback upload invalid config');
+      }
+
+      const sendFallbackRequest = async (mode: 'uri' | 'blob') => {
+        const formData = new FormData();
+        const fd = formData as any;
+        if (mode === 'blob') {
+          const localFileResponse = await fetch(file.uri);
+          const blob = await localFileResponse.blob();
+          fd.append('file', blob, file.name);
+        } else {
+          fd.append('file', file);
+        }
+        fd.append('token', token);
+        fd.append('app_id', appId);
+
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            'qiscus-sdk-app-id': String(appId),
+            'qiscus-sdk-version': String(sdkVersion ?? ''),
+          },
+          body: formData,
+        });
+        const raw = await response.text();
+
+        let json: any = null;
+        try {
+          json = raw ? JSON.parse(raw) : null;
+        } catch {}
+
+        return { mode, response, raw, json };
+      };
+
+      const first = await sendFallbackRequest('uri');
+      if (first.response.ok) {
+        const uploadedUrl = first.json?.results?.file?.url;
+        if (uploadedUrl) return uploadedUrl;
+      }
+
+      const shouldRetryWithBlob =
+        first.response.status === 400 &&
+        String(first.json?.error?.message ?? '').toLowerCase() ===
+          'validation error';
+
+      if (shouldRetryWithBlob) {
+        const second = await sendFallbackRequest('blob');
+        if (second.response.ok) {
+          const secondUrl = second.json?.results?.file?.url;
+          if (secondUrl) return secondUrl;
+        }
+        throw new Error(
+          `Fallback upload failed with HTTP ${second.response.status}`
+        );
+      }
+
+      throw new Error(
+        `Fallback upload failed with HTTP ${first.response.status}`
+      );
+    },
+    [getUploadConfig]
+  );
+  const uploadAttachment = useCallback(
+    async (file: { uri: string; type: string; name: string }) => {
+      try {
+        return await uploadViaSdk(file);
+      } catch (error: any) {
+        const isNetworkError =
+          error?.code === 'ERR_NETWORK' ||
+          String(error?.message || '')
+            .toLowerCase()
+            .includes('network error');
+        if (!isNetworkError) throw error;
+
+        return uploadViaFetchFallback(file);
+      }
+    },
+    [uploadViaFetchFallback, uploadViaSdk]
+  );
 
   const onImageSelected = useCallback(
-    async (v: DocumentPickerResponse) => {
-      // Transform DocumentPickerResponse to file object for Qiscus SDK
-      const fileUri = v.fileCopyUri || v.uri;
+    async (v: PickedFile) => {
+      const fileUri = v.uri;
       const file = {
         uri: fileUri,
         type: v.type || 'image/jpeg',
         name: v.name || 'image.jpg',
       };
 
-      qiscus.upload(file as any, (error, progress, url) => {
-        if (error != null) {
-          console.log('[Upload] Error:', error);
-        }
-        if (progress != null) {
-          console.log('[Upload] Progress:', progress);
-        }
-        if (url != null) {
-          // Sukses upload
-          const message = qiscus.generateFileAttachmentMessage({
-            roomId: room!.id,
-            url: url,
-            caption: '',
-            text: '',
-          });
-
-          sendMessage(message);
-        }
+      const placeholderId = `upload-${Date.now()}`;
+      setMessages((prev: Record<string, any>) => {
+        prev[placeholderId] = {
+          id: Date.now(),
+          uniqueId: placeholderId,
+          type: 'loading_placeholder',
+          text: `Uploading ${file.name}...`,
+          status: 'sending',
+          timestamp: new Date(),
+          chatRoomId: room?.id,
+          sender: currentUser,
+        } as any;
       });
+
+      try {
+        const url = await uploadAttachment(file);
+
+        if (!room) {
+          setMessages((prev: Record<string, any>) => {
+            delete prev[placeholderId];
+          });
+          return;
+        }
+
+        const message = qiscus.generateFileAttachmentMessage({
+          roomId: room.id,
+          url: url,
+          caption: '',
+          text: '',
+        });
+
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
+      } catch {
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        Alert.alert(
+          'Gagal',
+          'Terjadi kesalahan saat mengunggah lampiran gambar.'
+        );
+      }
     },
-    [qiscus, room, sendMessage]
+    [qiscus, room, sendMessage, uploadAttachment, setMessages, currentUser]
   );
   const onDocumentSelected = useCallback(
-    async (v: DocumentPickerResponse) => {
-      // Transform DocumentPickerResponse to file object for Qiscus SDK
-      const fileUri = v.fileCopyUri || v.uri;
+    async (v: PickedFile) => {
+      const fileUri = v.uri;
       const file = {
         uri: fileUri,
         type: v.type || 'application/octet-stream',
         name: v.name || 'document',
       };
 
-      qiscus.upload(file as any, (error, progress, url) => {
-        if (error != null) {
-          console.log('[Upload] Error:', error);
-        }
-        if (progress != null) {
-          console.log('[Upload] Progress:', progress);
-        }
-        if (url != null) {
-          // Sukses upload
-          const message = qiscus.generateFileAttachmentMessage({
-            roomId: room!.id,
-            url: url,
-            caption: '',
-            text: '',
-          });
-
-          sendMessage(message);
-        }
+      const placeholderId = `upload-${Date.now()}`;
+      setMessages((prev: Record<string, any>) => {
+        prev[placeholderId] = {
+          id: Date.now(),
+          uniqueId: placeholderId,
+          type: 'loading_placeholder',
+          text: `Uploading ${file.name}...`,
+          status: 'sending',
+          timestamp: new Date(),
+          chatRoomId: room?.id,
+          sender: currentUser,
+        } as any;
       });
+
+      try {
+        const url = await uploadAttachment(file);
+
+        if (!room) {
+          setMessages((prev: Record<string, any>) => {
+            delete prev[placeholderId];
+          });
+          return;
+        }
+
+        const message = qiscus.generateFileAttachmentMessage({
+          roomId: room.id,
+          url: url,
+          caption: '',
+          text: '',
+        });
+
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
+      } catch {
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        Alert.alert(
+          'Gagal',
+          'Terjadi kesalahan saat mengunggah lampiran dokumen.'
+        );
+      }
     },
-    [qiscus, room, sendMessage]
+    [qiscus, room, sendMessage, uploadAttachment, setMessages, currentUser]
   );
 
   return (
