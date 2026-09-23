@@ -7,6 +7,7 @@ import type {
   InitiateChatOptions,
   Message,
   Room,
+  SecureSession,
   SetupOptions,
 } from './types';
 
@@ -60,7 +61,9 @@ export const STORAGE = {
   lastUserData: 'MultichannelWidget::last-user-data',
   lastUserToken: 'MultichannelWidget::last-user-token',
   lastAppId: 'MultichannelWidget::last-app-id',
+  lastSessionId: 'MultichannelWidget::last-session-id',
 };
+export const secureSessionAtom = atomWithReset<SecureSession | null>(null);
 export const lastInitiateChatParamsAtom = atom<InitiateChatOptions | undefined>(
   undefined
 );

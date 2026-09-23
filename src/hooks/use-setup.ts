@@ -8,9 +8,10 @@ import {
   optionsAtom,
   qiscusAtom,
   roomIdAtom,
+  secureSessionAtom,
   STORAGE,
 } from '../state';
-import type { Account, SetupOptions } from '../types';
+import type { Account, SecureSession, SetupOptions } from '../types';
 import { useOnMessageDelivered } from './use-on-message-delivered';
 import { useOnMessageRead } from './use-on-message-read';
 import { useOnMessageReceived } from './use-on-message-received';
@@ -38,6 +39,10 @@ export function useSetup(): (
       ).then((it) => (it != null ? JSON.parse(it) : undefined));
       const lastUserToken = await AsyncStorage.getItem(STORAGE.lastUserToken);
       const lastRoomId = await AsyncStorage.getItem(STORAGE.lastRoomId);
+      const lastSession: SecureSession | null = await AsyncStorage.getItem(
+        STORAGE.lastSessionId
+      ).then((it) => (it != null ? JSON.parse(it) : null));
+      set(secureSessionAtom, lastSession);
 
       if (lastUserData != null && lastUserToken != null) {
         set(appIdAtom, lastAppId!);

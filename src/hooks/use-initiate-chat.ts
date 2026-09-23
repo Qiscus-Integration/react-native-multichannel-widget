@@ -7,9 +7,14 @@ import {
   optionsAtom,
   qiscusAtom,
   roomIdAtom,
+  secureSessionAtom,
   STORAGE,
 } from '../state';
 import type { InitiateChatOptions } from '../types';
+import {
+  buildSecureSession,
+  getSessionIdForInitiate,
+} from '../utils/secure-session';
 import { useGetSessions } from './use-get-sessions';
 import { useUpdateRoomInfo } from './use-update-room-info';
 
@@ -24,6 +29,7 @@ export function useInitiateChat() {
     const opts = get(optionsAtom);
     const currentUser = get(currentUserAtom);
     const lastRoomId = get(roomIdAtom);
+    const lastSession = get(secureSessionAtom);
 
     if (currentUser != null && lastRoomId != null) {
       const [room, messages] = await updateRoomInfo();
@@ -50,7 +56,7 @@ export function useInitiateChat() {
     }
 
     const nonce = await qiscus.getJWTNonce();
-    let data = {
+    const data: Record<string, unknown> = {
       app_id: qiscus.appId,
       user_id: arg.userId,
       name: arg.name,
@@ -60,8 +66,14 @@ export function useInitiateChat() {
       nonce,
     };
 
-    // @ts-ignore
     if (arg.channelId != null) data.channel_id = arg.channelId;
+
+    const sessionId = getSessionIdForInitiate(lastSession, {
+      appId: qiscus.appId,
+      userId: arg.userId,
+      channelId: arg.channelId,
+    });
+    if (sessionId != null) data.session_id = sessionId;
 
     const baseUrl = opts.baseURLMultichannel;
     const resp = await axios
@@ -75,6 +87,19 @@ export function useInitiateChat() {
     const roomId = Number(customer_room.room_id);
     const user = await qiscus.setUserWithIdentityToken(identity_token);
     const userToken = qiscus.token;
+    const secureSession = buildSecureSession(resp, {
+      appId: qiscus.appId,
+      userId: arg.userId,
+    });
+
+    if (secureSession == null) {
+      await AsyncStorage.removeItem(STORAGE.lastSessionId);
+    } else {
+      await AsyncStorage.setItem(
+        STORAGE.lastSessionId,
+        JSON.stringify(secureSession)
+      );
+    }
 
     await AsyncStorage.multiSet([
       [STORAGE.lastRoomId, roomId.toString()],
@@ -91,6 +116,7 @@ export function useInitiateChat() {
     set(roomIdAtom, roomId);
     set(messageExtrasAtom, arg.messageExtras);
     set(currentUserAtom, (_) => user);
+    set(secureSessionAtom, secureSession);
 
     await updateRoomInfo();
 
