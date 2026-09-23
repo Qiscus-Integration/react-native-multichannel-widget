@@ -10,6 +10,7 @@ import {
   qiscusAtom,
   roomAtom,
   roomIdAtom,
+  secureSessionAtom,
   STORAGE,
   userConfigAvatarAtom,
   userConfigDisplayNameAtom,
@@ -31,6 +32,7 @@ export function useClearUser() {
     set(userConfigPropertiesAtom, RESET);
     set(lastUserDataAtom, RESET);
     set(lastUserTokenAtom, RESET);
+    set(secureSessionAtom, RESET);
     set(deviceIdAtom, RESET);
 
     get(qiscusAtom).clearUser();
@@ -40,6 +42,7 @@ export function useClearUser() {
       STORAGE.lastUserData,
       STORAGE.lastUserToken,
       STORAGE.lastRoomId,
+      STORAGE.lastSessionId,
     ]);
   });
 

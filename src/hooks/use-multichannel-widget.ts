@@ -28,6 +28,7 @@ import {
   roomSubtitleTextAtom,
   roomSystemEventHiddenAtom,
   roomTitleAtom,
+  secureSessionAtom,
   sendContainerBackgroundColorThemeAtom,
   sendContainerColorThemeAtom,
   STORAGE,
@@ -44,6 +45,7 @@ import type {
   IChatRoomConfigSetter,
   IRoomSubtitleConfig,
   IUseMultichannelWidget,
+  SecureSession,
 } from '../types';
 import { IAvatarConfig } from '../types';
 import { useAtomCallbackWithDeps } from './use-atom-callback-with-deps';
@@ -174,6 +176,10 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
     const lastUserToken = await AsyncStorage.getItem(STORAGE.lastUserToken);
     const lastRoomId = await AsyncStorage.getItem(STORAGE.lastRoomId);
     const lastAppId = await AsyncStorage.getItem(STORAGE.lastAppId);
+    const lastSession: SecureSession | null = await AsyncStorage.getItem(
+      STORAGE.lastSessionId
+    ).then((it) => (it != null ? JSON.parse(it) : null));
+    set(secureSessionAtom, lastSession);
 
     if (lastUserData != null && lastUserToken != null) {
       setUser({

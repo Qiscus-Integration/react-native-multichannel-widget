@@ -22,6 +22,13 @@ export enum IAvatarConfig {
   Disabled = 'disabled',
 }
 
+export type SecureSession = {
+  id: string;
+  appId: string;
+  channelId: string;
+  userId: string;
+};
+
 // Notification
 type INotificationConfig = {
   setEnableNotification: (enable: boolean) => void;
