@@ -110,8 +110,8 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
     emptyBackgroundColorThemeAtom
   );
 
-  const isLoggedIn = useComputedAtomValue((get) => {
-    return get(currentUserAtom) != null;
+  const currentUserId = useComputedAtomValue((get) => {
+    return get(currentUserAtom)?.id;
   });
   const setup = useSetup();
   const initiateChat_ = useInitiateChat();
@@ -121,8 +121,8 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
   const appId = useAtomValue(appIdAtom);
   const initiateChat = useAtomCallbackWithDeps(
     async (get) => {
-      if (isLoggedIn) return;
       const userId = get(userConfigIdAtom);
+      if (currentUserId != null && currentUserId === userId) return;
 
       invariant(
         appId,

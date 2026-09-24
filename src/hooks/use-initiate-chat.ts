@@ -15,6 +15,7 @@ import {
   buildSecureSession,
   getSessionIdForInitiate,
 } from '../utils/secure-session';
+import { resetActiveUser } from '../utils/reset-active-user';
 import { useGetSessions } from './use-get-sessions';
 import { useUpdateRoomInfo } from './use-update-room-info';
 
@@ -28,10 +29,16 @@ export function useInitiateChat() {
     const qiscus = get(qiscusAtom);
     const opts = get(optionsAtom);
     const currentUser = get(currentUserAtom);
+
+    if (currentUser != null && currentUser.id !== arg.userId) {
+      await resetActiveUser(get, set, qiscus);
+    }
+
+    const activeUser = get(currentUserAtom);
     const lastRoomId = get(roomIdAtom);
     const lastSession = get(secureSessionAtom);
 
-    if (currentUser != null && lastRoomId != null) {
+    if (activeUser != null && lastRoomId != null) {
       const [room, messages] = await updateRoomInfo();
 
       const lastMessageText1 = room?.lastMessage?.text;
